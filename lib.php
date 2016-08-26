@@ -160,7 +160,7 @@ function report_comments_getcoursecomments($courseid, $sort = 'date') {
         $url = new moodle_url('/report/comments/index.php', array('id' => $comment->userid, 'course' => $courseid));
         $comment->fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
         $comment->time = userdate($comment->timecreated, $strftimeformat);
-        $url = new moodle_url('/course/view.php', array('id' => $courseid));
+        $url = course_get_url($courseid);
         $comment->content = html_writer::link($url, format_text($comment->content, $comment->format, $formatoptions));
     }
 
