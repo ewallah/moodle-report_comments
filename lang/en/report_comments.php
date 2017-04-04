@@ -15,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * Language strings
  *
  * @package    report
  * @subpackage comments
- * @copyright  2014 iplusacademy.org
+ * @copyright  2017 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,4 +30,5 @@ $string['page-report-comments-index'] = 'Course comments report';
 $string['page-report-comments-user'] = 'User comments report';
 $string['pluginname'] = 'Comments report';
 $string['eventreportviewed'] = 'Comments report viewed';
-
+$string['messageprovider:comment'] = 'New comment created';
+$string['comments:emailnotifycomment'] = 'Be notified of new comment';

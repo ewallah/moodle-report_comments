@@ -19,8 +19,8 @@
  *
  * @package    report
  * @subpackage comments
- * @copyright  2014 iplusacademy.org
- * @author     Renaat Debleu <info@eWallah.net>
+ * @copyright  2017 iplusacademy.org
+ * @devolopper Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

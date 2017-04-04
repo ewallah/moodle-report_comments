@@ -17,8 +17,10 @@
 /**
  * Event observer.
  *
- * @package    report_comments
- * @copyright  2014 Renaat Debleu (www.eWallah.net)
+ * @package    report
+ * @subpackage comments
+ * @copyright  2017 iplusacademy.org
+ * @devolopper Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,6 +31,7 @@ class report_comments_observer {
 
     public static function commentcreated(\core\event\base $comment) {
         global $CFG, $DB, $USER;
+        debugging('comment created');
         if (!empty($comment)) {
             if (!empty($comment->courseid)) {
                 if ($DB->record_exists('course', ['id' => $comment->courseid])) {
@@ -41,8 +44,8 @@ class report_comments_observer {
                             foreach ($teachers as $admin) {
                                 $teacher = $DB->get_record('user', ['id' => $admin->id]);
                                 $message = new \core\message\message();
-                                $message->component = 'theme_ewallah';
-                                $message->name = 'comment';
+                                $message->component = 'report_comments';
+                                $message->name = 'newcomment';
                                 $message->courseid = $comment->courseid;
                                 $message->userfrom = $supportuser;
                                 $message->userto = $teacher;

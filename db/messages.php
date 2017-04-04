@@ -17,17 +17,18 @@
 /**
  * Message handler for comments report
  *
- * @package   report comments
- * @copyright 2016 Renaat Debleu (www.ewallah.net)
+ * @package    report
+ * @subpackage comments
+ * @copyright  2017 iplusacademy.org
+ * @devolopper Renaat Debleu (www.eWallah.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = [
-    // Notify that a comment has been made.
-    'comment' => [
-        'capability'  => 'report/comments:emailnotifycomment',
+    'newcomment' => [
+        'capability'  => 'report/comments:notifynewcomment',
         'defaults' => [
             'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
             'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDOFF,
