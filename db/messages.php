@@ -15,21 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capabilities
+ * Message handler for comments report
  *
- * @package    report_comments
- * @copyright  2014 iplusacademy.org
- * @author     Renaat Debleu <info@eWallah.net>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   report comments
+ * @copyright 2016 Renaat Debleu (www.ewallah.net)
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [
-    'report/comments:view' => [
-        'riskbitmask' => RISK_PERSONAL,
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => ['teacher' => CAP_ALLOW, 'editingteacher' => CAP_ALLOW, 'manager' => CAP_ALLOW],
-        'clonepermissionsfrom' => 'coursereport/comments:view',
-    ]];
+$messageproviders = [
+    // Notify that a comment has been made.
+    'comment' => [
+        'capability'  => 'report/comments:emailnotifycomment',
+        'defaults' => [
+            'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDOFF,
+        ]]];

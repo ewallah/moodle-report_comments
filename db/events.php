@@ -15,21 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capabilities
+ * Handlers of events for comments report
  *
- * @package    report_comments
- * @copyright  2014 iplusacademy.org
- * @author     Renaat Debleu <info@eWallah.net>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   report_comments
+ * @copyright Renaat Debleu (www.ewallah.net)
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [
-    'report/comments:view' => [
-        'riskbitmask' => RISK_PERSONAL,
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => ['teacher' => CAP_ALLOW, 'editingteacher' => CAP_ALLOW, 'manager' => CAP_ALLOW],
-        'clonepermissionsfrom' => 'coursereport/comments:view',
-    ]];
+$observers = [['eventname' => 'core\event\comment_created',
+               'callback'  => 'report_comments_observer::commentcreated',
+               'internal'  => false,
+               'priority'  => 10]];

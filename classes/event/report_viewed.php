@@ -28,6 +28,15 @@ namespace report_comments\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * The report viewed event.
+ *
+ * @package    report
+ * @subpackage comments
+ * @copyright  2014 iplusacademy.org
+ * @author     Renaat Debleu <info@eWallah.net>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class report_viewed extends \core\event\base {
 
     /**
@@ -64,19 +73,6 @@ class report_viewed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/report/comments/index.php', array('course' => $this->courseid));
-    }
-
-    /**
-     * custom validations.
-     *
-     * @throws \coding_exception when validation fails.
-     * @return void
-     */
-    protected function validate_data() {
-        parent::validate_data();
-        if ($this->contextlevel != CONTEXT_COURSE) {
-            throw new \coding_exception('Context level must be CONTEXT_COURSE.');
-        }
+        return new \moodle_url('/report/comments/index.php', ['course' => $this->courseid]);
     }
 }

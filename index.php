@@ -28,7 +28,7 @@ require_once(dirname(__FILE__).'/../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/comment/lib.php');
 require_once($CFG->dirroot.'/comment/locallib.php');
-require_once($CFG->dirroot.'/report/comments/lib.php');
+require_once($CFG->dirroot.'/report/comments/locallib.php');
 require_once($CFG->libdir.'/tablelib.php');
 
 $courseid   = required_param('course', PARAM_INT);
@@ -38,11 +38,11 @@ $action     = optional_param('action', '', PARAM_ALPHA);
 $confirm    = optional_param('confirm', 0, PARAM_INT);
 $sort       = optional_param('tsort', 'date', PARAM_ALPHA);
 
-$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+$course = get_course($courseid);
 $context = context_course::instance($courseid);
 
 $url = '/report/comments/index.php';
-$arr = array('course' => $courseid);
+$arr = ['course' => $courseid];
 
 $PAGE->set_url(new moodle_url($url, $arr));
 $PAGE->set_pagelayout('report');
@@ -65,15 +65,9 @@ if ($action === 'delete') {
     if (!empty($commentid)) {
         if (!$confirm) {
             echo $OUTPUT->header();
-            $optionsyes = array(
-                'course' => $courseid,
-                'action' => 'delete',
-                'commentid' => $commentid,
-                'confirm' => 1,
-                'sesskey' => sesskey());
-            $optionsno  = array(
-                'course' => $courseid,
-                'sesskey' => sesskey());
+            $optionsyes = ['course' => $courseid, 'action' => 'delete', 'commentid' => $commentid,
+                           'confirm' => 1, 'sesskey' => sesskey()];
+            $optionsno  = ['course' => $courseid, 'sesskey' => sesskey()];
             $buttoncontinue = new single_button(new moodle_url($url, $optionsyes), get_string('delete'));
             $buttoncancel = new single_button(new moodle_url($url, $optionsno), get_string('cancel'));
             echo $OUTPUT->confirm(get_string('confirmdeletecomments', 'admin'), $buttoncontinue, $buttoncancel);
@@ -97,23 +91,15 @@ $tabl = new flexible_table('admin-comments-compatible');
 if ($userid == 0) {
     echo html_writer::tag('h3', $course->fullname);
     $comments = report_comments_getcoursecomments($courseid, $sort);
-    $tabl->define_columns(array('date', 'author', 'content', 'action'));
-    $tabl->define_headers(array(
-        get_string('date'),
-        get_string('author', 'search'),
-        get_string('content'),
-        get_string('action')));
+    $tabl->define_columns(['date', 'author', 'content', 'action']);
+    $tabl->define_headers([get_string('date'), get_string('author', 'search'), get_string('content'), get_string('action')]);
 
 } else {
-    $user = $DB->get_record('user', array('id' => $userid), 'firstname, lastname');
+    $user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname');
     echo html_writer::tag('h3', $user->firstname . ' ' . $user->lastname);
     $comments = report_comments_getusercomments($userid);
-    $tabl->define_columns(array('date', 'course', 'content', 'action'));
-    $tabl->define_headers(array(
-        get_string('date'),
-        get_string('course'),
-        get_string('content'),
-        get_string('action')));
+    $tabl->define_columns(['date', 'course', 'content', 'action']);
+    $tabl->define_headers([get_string('date'), get_string('course'), get_string('content'), get_string('action')]);
 }
 
 if (count($comments) == 0) {
@@ -125,15 +111,12 @@ if (count($comments) == 0) {
     $tabl->define_baseurl(new moodle_url($url, $arr));
     $tabl->set_attribute('class', 'admintable generaltable');
     $tabl->setup();
-    $tablrows = array();
+    $tablrows = [];
 
-    $link = new moodle_url($url, array(
-        'course' => $courseid,
-        'action' => 'delete',
-        'sesskey' => sesskey()));
+    $link = new moodle_url($url, ['course' => $courseid, 'action' => 'delete', 'sesskey' => sesskey()]);
     foreach ($comments as $c) {
-        $action = html_writer::link(new moodle_url($link, array('commentid' => $c->id)), get_string('delete'));
-        $tabl->add_data(array($c->time, $c->fullname, $c->content, $action));
+        $action = html_writer::link(new moodle_url($link, ['commentid' => $c->id]), get_string('delete'));
+        $tabl->add_data([$c->time, $c->fullname, $c->content, $action]);
     }
     $tabl->print_html();
 }
@@ -142,5 +125,5 @@ if (count($comments) == 0) {
 echo $OUTPUT->footer($course);
 
 // Trigger a report viewed event.
-$event = \report_comments\event\report_viewed::create(array('context' => $context));
+$event = \report_comments\event\report_viewed::create(['context' => $context]);
 $event->trigger();

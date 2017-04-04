@@ -26,8 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2014092001;          // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2014050800;          // Requires this Moodle version
-$plugin->release = '2.7';
-$plugin->maturity = MATURITY_BETA;
-$plugin->component = 'report_comments';   // Full name of the plugin.
+$plugin->version   = 2017040401;
+$plugin->requires  = 2014050800;
+$plugin->release = '3.2';
+$plugin->maturity = MATURITY_RC;
+$plugin->component = 'report_comments';
