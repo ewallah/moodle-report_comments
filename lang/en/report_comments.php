@@ -30,5 +30,5 @@ $string['page-report-comments-index'] = 'Course comments report';
 $string['page-report-comments-user'] = 'User comments report';
 $string['pluginname'] = 'Comments report';
 $string['eventreportviewed'] = 'Comments report viewed';
-$string['messageprovider:comment'] = 'New comment created';
+$string['messageprovider:newcomment'] = 'New comment created';
 $string['comments:emailnotifycomment'] = 'Be notified of new comment';

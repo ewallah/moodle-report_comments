@@ -41,30 +41,36 @@ class report_comments_observer {
                         $supportuser = core_user::get_support_user();
                         $sendtext = $CFG->wwwroot . ': '. $USER->firstname . ' ' . $USER->lastname . ' made a comment.';
                         if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {
+                            $message = new \core\message\message();
+                            $message->component = 'report_comments';
+                            $message->name = 'newcomment';
+                            $message->courseid = $comment->courseid;
+                            $message->userfrom = $supportuser;
+                            $message->subject = $sendtext;
+                            $message->fullmessage = $sendtext;
+                            $message->fullmessageformat = FORMAT_MARKDOWN;
+                            $message->fullmessagehtml = stripcslashes($content);
+                            $message->smallmessage = $sendtext;
+                            $message->notification = '1';
+                            $message->contexturl = new \moodle_url('course/view.php', ['id' => $comment->courseid]);
+                            $message->contexturlname = $sendtext;
+                            $message->replyto = $admin->email;
+                            $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
                             foreach ($teachers as $admin) {
                                 $teacher = $DB->get_record('user', ['id' => $admin->id]);
-                                $message = new \core\message\message();
-                                $message->component = 'report_comments';
-                                $message->name = 'newcomment';
-                                $message->courseid = $comment->courseid;
-                                $message->userfrom = $supportuser;
                                 $message->userto = $teacher;
-                                $message->subject = $sendtext;
-                                $message->fullmessage = $sendtext;
-                                $message->fullmessageformat = FORMAT_MARKDOWN;
-                                $message->fullmessagehtml = stripcslashes($content);
-                                $message->smallmessage = $sendtext;
-                                $message->notification = '1';
-                                $message->contexturl = new \moodle_url('course/view.php', ['id' => $comment->courseid]);
-                                $message->contexturlname = $sendtext;
-                                $message->replyto = $admin->email;
-                                $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
                                 message_send($message);
                             }
                         }
+                    } else {
+                        debugging('no teachers');
                     }
                 }
+            } else {
+                debugging('empty courseid');
             }
+        } else {
+            debugging('empty comment');
         }
     }
 }
