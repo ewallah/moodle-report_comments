@@ -72,7 +72,7 @@ function report_comments_getusercomments($userid, $sort = 'date') {
             }
             $comment->content = html_writer::link($contexturl, format_text($comment->content, $comment->format, $formatoptions));
         }
-        return $comments;
+        return sortcomments($comments, $sort);
     }
     return '';
 }
@@ -116,6 +116,10 @@ function report_comments_getcoursecomments($courseid, $sort = 'date') {
             }
         }
     }
+    return sortcomments($comments, $sort);
+}
+
+function sortcomments($comments, $sort) {
     switch ($sort) {
         case 'date':
             usort($comments, "cmpdate");
