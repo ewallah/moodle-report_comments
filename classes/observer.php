@@ -52,7 +52,7 @@ class report_comments_observer {
                             $message->fullmessagehtml = stripcslashes($content);
                             $message->smallmessage = $sendtext;
                             $message->notification = '1';
-                            $message->contexturl = new \moodle_url('course/view.php', ['id' => $comment->courseid]);
+                            $message->contexturl = new \moodle_url('/course/view.php', ['id' => $comment->courseid]);
                             $message->contexturlname = $sendtext;
                             $message->replyto = $admin->email;
                             $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
