@@ -31,7 +31,6 @@ class report_comments_observer {
 
     public static function commentcreated(\core\event\base $comment) {
         global $CFG, $DB, $USER;
-        debugging('comment created');
         if (!empty($comment)) {
             if (!empty($comment->courseid)) {
                 if ($DB->record_exists('course', ['id' => $comment->courseid])) {
@@ -54,7 +53,6 @@ class report_comments_observer {
                             $message->notification = '1';
                             $message->contexturl = new \moodle_url('/course/view.php', ['id' => $comment->courseid]);
                             $message->contexturlname = $sendtext;
-                            $message->replyto = $admin->email;
                             $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
                             foreach ($teachers as $admin) {
                                 $teacher = $DB->get_record('user', ['id' => $admin->id]);
