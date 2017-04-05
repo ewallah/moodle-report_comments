@@ -22,7 +22,7 @@ matrix:
 env:
  global:
   - MOODLE_BRANCH=MOODLE_32_STABLE
-  - MOODLE_BRANCH=master
+  #- MOODLE_BRANCH=master
  matrix:
   - DB=mysqli
     
