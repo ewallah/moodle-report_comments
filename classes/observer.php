@@ -27,8 +27,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class report_comments_observer {
+/**
+ * Class observer.
+ *
+ * @package    report
+ * @subpackage comments
+ * @copyright  2017 iplusacademy.org
+ * @devolopper Renaat Debleu (www.eWallah.net)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
+ class report_comments_observer {
+
+    /**
+     * Handles the coomment created event.
+     *
+     * @param \core\event\base $comment the event object.
+     */
     public static function commentcreated(\core\event\base $comment) {
         global $CFG, $DB, $USER;
         if (!empty($comment)) {
