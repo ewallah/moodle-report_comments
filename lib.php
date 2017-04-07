@@ -55,7 +55,7 @@ function report_comments_extend_navigation_course($navigation, $course, $context
  * @param stdClass $course The course to object for the report
  */
 function report_comments_extend_navigation_user($navigation, $user, $course) {
-    if (report_completion_can_access_user_report($user, $course)) {
+    if (report_comments_can_access_user_report($user, $course)) {
         $url = new moodle_url('/report/comments/index.php', ['course' => $course->id, 'id' => $user->id]);
         $navigation->add(get_string('comments'), $url);
     }

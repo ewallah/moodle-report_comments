@@ -36,8 +36,8 @@ class report_comments_observer {
                 if ($DB->record_exists('course', ['id' => $comment->courseid])) {
                     $context = context_course::instance($comment->courseid);
                     $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
+                    $supportuser = core_user::get_support_user();
                     if ($teachers = get_role_users($role->id, $context)) {
-                        $supportuser = core_user::get_support_user();
                         $sendtext = $CFG->wwwroot . ': '. $USER->firstname . ' ' . $USER->lastname . ' made a comment.';
                         if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {
                             $message = new \core\message\message();
@@ -60,12 +60,10 @@ class report_comments_observer {
                                 message_send($message);
                             }
                         }
-                    } else {
-                        debugging('no teachers');
                     }
+                } else {
+                    debugging('course not found');
                 }
-            } else {
-                debugging('empty courseid');
             }
         } else {
             debugging('empty comment');
