@@ -20,6 +20,7 @@ Feature: Comments report
       | teacher2 | C2 | editingteacher |
       | student1 | C1 | student |
     And I log in as "teacher1"
+    And I am on site homepage
     And I follow "Course 1"
     And I turn editing mode on
     And I add the "Comments" block
@@ -49,6 +50,7 @@ Feature: Comments report
   @javascript
   Scenario: See if there are links created on the commnet report.
     Given I log in as "teacher2"
+    And I am on site homepage
     And I follow "Course 2"
     And I navigate to "Comments" node in "Course administration > Reports"
     Then I should not see "comment 01"
