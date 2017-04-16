@@ -46,42 +46,44 @@ defined('MOODLE_INTERNAL') || die();
      */
     public static function commentcreated(\core\event\base $comment) {
         global $CFG, $DB, $USER;
-        if (!empty($comment)) {
-            if (!empty($comment->courseid)) {
-                if ($DB->record_exists('course', ['id' => $comment->courseid])) {
-                    $context = context_course::instance($comment->courseid);
-                    $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
-                    $supportuser = core_user::get_support_user();
-                    if ($teachers = get_role_users($role->id, $context)) {
-                        $sendtext = $CFG->wwwroot . ': '. $USER->firstname . ' ' . $USER->lastname . ' made a comment.';
-                        if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {
-                            $message = new \core\message\message();
-                            $message->component = 'report_comments';
-                            $message->name = 'newcomment';
-                            $message->courseid = $comment->courseid;
-                            $message->userfrom = $supportuser;
-                            $message->subject = $sendtext;
-                            $message->fullmessage = $sendtext;
-                            $message->fullmessageformat = FORMAT_MARKDOWN;
-                            $message->fullmessagehtml = stripcslashes($content);
-                            $message->smallmessage = $sendtext;
-                            $message->notification = '1';
-                            $message->contexturl = new \moodle_url('/course/view.php', ['id' => $comment->courseid]);
-                            $message->contexturlname = $sendtext;
-                            $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
-                            foreach ($teachers as $admin) {
-                                $teacher = $DB->get_record('user', ['id' => $admin->id]);
-                                $message->userto = $teacher;
-                                message_send($message);
+        if ($CFG->commentnotifications === 1) {
+            if (!empty($comment)) {
+                if (!empty($comment->courseid)) {
+                    if ($DB->record_exists('course', ['id' => $comment->courseid])) {
+                        $context = context_course::instance($comment->courseid);
+                        $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
+                        $supportuser = core_user::get_support_user();
+                        if ($teachers = get_role_users($role->id, $context)) {
+                            $sendtext = $CFG->wwwroot . ': '. $USER->firstname . ' ' . $USER->lastname . ' made a comment.';
+                            if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {
+                                $message = new \core\message\message();
+                                $message->component = 'report_comments';
+                                $message->name = 'newcomment';
+                                $message->courseid = $comment->courseid;
+                                $message->userfrom = $supportuser;
+                                $message->subject = $sendtext;
+                                $message->fullmessage = $sendtext;
+                                $message->fullmessageformat = FORMAT_MARKDOWN;
+                                $message->fullmessagehtml = stripcslashes($content);
+                                $message->smallmessage = $sendtext;
+                                $message->notification = '1';
+                                $message->contexturl = new \moodle_url('/course/view.php', ['id' => $comment->courseid]);
+                                $message->contexturlname = $sendtext;
+                                $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
+                                foreach ($teachers as $admin) {
+                                    $teacher = $DB->get_record('user', ['id' => $admin->id]);
+                                    $message->userto = $teacher;
+                                    message_send($message);
+                                }
                             }
                         }
+                    } else {
+                        debugging('course not found');
                     }
-                } else {
-                    debugging('course not found');
                 }
+            } else {
+                debugging('empty comment');
             }
-        } else {
-            debugging('empty comment');
         }
     }
 }

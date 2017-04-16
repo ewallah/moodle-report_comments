@@ -15,22 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Settings.
  *
  * @package    report
  * @subpackage comments
  * @copyright  2017 iplusacademy.org
- * @author     Renaat Debleu <info@eWallah.net>
+ * @devolopper Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['comments:emailnotifycomment'] = 'Be notified of new comment';
-$string['comments:view'] = 'View comments report';
-$string['eventreportviewed'] = 'Comments report viewed';
-$string['label'] = 'Notifications enabled';
-$string['labelhelp'] = 'Teachers receive a notification when a new comment is made.';
-$string['messageprovider:newcomment'] = 'New comment created';
-$string['page-report-comments-index'] = 'Course comments report';
-$string['page-report-comments-user'] = 'User comments report';
-$string['page-report-comments-x'] = 'Any comments report';
-$string['pluginname'] = 'Comments report';
+defined('MOODLE_INTERNAL') || die();
+
+if ($ADMIN->fulltree) {
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'commentnotifications',
+            get_string('label', 'report_comments'),
+            get_string('labelhelp', 'report_comments'),
+            1));
+}
