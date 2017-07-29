@@ -46,7 +46,7 @@ Feature: Comments report
       | Comment | comment 04 |
     And I press "Save changes"
     And I log out
- 
+
   @javascript
   Scenario: See if there are links created on the commnet report.
     Given I log in as "teacher2"
@@ -69,4 +69,3 @@ Feature: Comments report
     And I follow "Delete"
     And I click on "Delete" "button"
     Then I should see "comment 02"
-    
