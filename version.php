@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die;
 
 $plugin->version   = 2017110500;
 $plugin->requires  = 2014050800;
-$plugin->release = '3.2';
+$plugin->release = '3.3+';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->component = 'report_comments';
