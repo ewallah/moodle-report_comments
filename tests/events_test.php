@@ -18,7 +18,8 @@
  * Tests for report comments events.
  *
  * @package    report_comments
- * @copyright  2014 onwards Ankit Agarwal<ankit.agrr@gmail.com>
+ * @copyright  2017 iplusacademy.org
+ * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
@@ -28,13 +29,11 @@ defined('MOODLE_INTERNAL') || die();
  * Class report_comments_events_testcase
  *
  * Class for tests related to comments report events.
- *  * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-
 class report_comments_events_testcase extends advanced_testcase {
 
     /**

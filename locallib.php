@@ -17,16 +17,21 @@
 /**
  * Local functions.
  *
- * @package    report
- * @subpackage comments
- * @copyright  2017 iplusacademy.org
- * @devolopper Renaat Debleu (www.eWallah.net)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   report_comments
+ * @copyright 2017 iplusacademy.org
+ * @author    Renaat Debleu (www.eWallah.net)
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-function report_comments_getusercomments($userid, $sort = 'date') {
+/**
+ * Get user comments
+ *
+ * @param int $userid
+ * @param string $sort
+ * @return string
+ */function report_comments_getusercomments($userid, $sort = 'date') {
     global $CFG, $DB;
     if ($user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname')) {
         $url = new moodle_url('/user/view.php', ['id' => $userid]);
@@ -77,6 +82,13 @@ function report_comments_getusercomments($userid, $sort = 'date') {
     return '';
 }
 
+/**
+ * Get course comments
+ *
+ * @param int $courseid
+ * @param string $sort
+ * @return string
+ */
 function report_comments_getcoursecomments($courseid, $sort = 'date') {
     global $CFG, $DB;
     $formatoptions = ['overflowdiv' => true];
@@ -119,6 +131,13 @@ function report_comments_getcoursecomments($courseid, $sort = 'date') {
     return sortcomments($comments, $sort);
 }
 
+/**
+ * Sort comments
+ *
+ * @param array $comments
+ * @param string $sort
+ * @return array
+ */
 function sortcomments($comments, $sort) {
     switch ($sort) {
         case 'date':
@@ -134,12 +153,27 @@ function sortcomments($comments, $sort) {
     return $comments;
 }
 
+/**
+ * Compare date reverse
+ *
+ * @param stdClass $a
+ * @param stdClass $b
+ * @return bool
+ */
 function cmpdate($a, $b) {
     if ($a->timecreated == $b->timecreated) {
         return 0;
     }
     return ($a->timecreated < $b->timecreated) ? -1 : 1;
 }
+
+/**
+ * Compare date reverse
+ *
+ * @param stdClass $a
+ * @param stdClass $b
+ * @return bool
+ */
 function cmpdaterev($a, $b) {
     if ($a->timecreated == $b->timecreated) {
         return 0;
@@ -147,6 +181,13 @@ function cmpdaterev($a, $b) {
     return ($a->timecreated < $b->timecreated) ? 1 : -1;
 }
 
+/**
+ * Compare id
+ *
+ * @param stdClass $a
+ * @param stdClass $b
+ * @return bool
+ */
 function cmpid($a, $b) {
     if ($a->id == $b->id) {
         return 0;
@@ -154,6 +195,13 @@ function cmpid($a, $b) {
     return ($a->id < $b->id) ? -1 : 1;
 }
 
+/**
+ * Compare id reverse
+ *
+ * @param stdClass $a
+ * @param stdClass $b
+ * @return bool
+ */
 function cmpidrev($a, $b) {
     if ($a->id == $b->id) {
         return 0;
@@ -161,6 +209,13 @@ function cmpidrev($a, $b) {
     return ($a->id < $b->id) ? 1 : -1;
 }
 
+/**
+ * Compare content
+ *
+ * @param string $a
+ * @param string $b
+ * @return bool
+ */
 function cmpcontent($a, $b) {
     if ($a->content == $b->content) {
         return 0;
@@ -168,6 +223,13 @@ function cmpcontent($a, $b) {
     return ($a->content < $b->content) ? -1 : 1;
 }
 
+/**
+ * Compare content reverse
+ *
+ * @param string $a
+ * @param string $b
+ * @return bool
+ */
 function cmpcontentrev($a, $b) {
     if ($a->content == $b->content) {
         return 0;

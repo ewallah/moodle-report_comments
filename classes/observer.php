@@ -17,10 +17,9 @@
 /**
  * Event observer.
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
- * @devolopper Renaat Debleu (www.eWallah.net)
+ * @author     Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,13 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Class observer.
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
- * @devolopper Renaat Debleu (www.eWallah.net)
+ * @author     Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class report_comments_observer {
 
     /**

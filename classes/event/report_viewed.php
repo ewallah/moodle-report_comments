@@ -17,8 +17,7 @@
 /**
  * The iplusfeedback report viewed event.
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2014 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -31,8 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The report viewed event.
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2014 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
