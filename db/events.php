@@ -17,20 +17,17 @@
 /**
  * Handlers of events for comments report
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
- * @devolopper Renaat Debleu (www.eWallah.net)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Renaat Debleu (www.eWallah.net)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $observers = [['eventname' => 'core\event\comment_created',
                'callback'  => 'report_comments_observer::commentcreated',
-               'internal'  => false,
-               'priority'  => 10],
+               'internal'  => false],
               ['eventname' => 'block_comments\event\comment_created',
                'callback'  => 'report_comments_observer::commentcreated',
-               'internal'  => false,
-               'priority'  => 10]];
+               'internal'  => false]];

@@ -17,8 +17,7 @@
 /**
  * Version details
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2017041601;
+$plugin->version   = 2017110500;
 $plugin->requires  = 2014050800;
 $plugin->release = '3.2';
-$plugin->maturity = MATURITY_RC;
+$plugin->maturity = MATURITY_STABLE;
 $plugin->component = 'report_comments';

@@ -17,10 +17,9 @@
 /**
  * Library functions.
  *
- * @package    report
- * @subpackage comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
- * @devolopper Renaat Debleu (www.eWallah.net)
+ * @author     Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -65,8 +64,6 @@ function report_comments_extend_navigation_user($navigation, $user, $course) {
 /**
  * Is current user allowed to access this report
  *
- * @private defined in lib.php for performance reasons
- *
  * @param stdClass $user
  * @param stdClass $course
  * @return bool
@@ -74,39 +71,23 @@ function report_comments_extend_navigation_user($navigation, $user, $course) {
 function report_comments_can_access_user_report($user, $course) {
     global $CFG, $USER;
 
-    if (!$CFG->usecomments) {
-        return false;
-    }
-
-    $coursecontext = context_course::instance($course->id);
-    if (has_capability('report/comments:view', $coursecontext)) {
-        return true;
-    }
-
-    $personalcontext = context_user::instance($user->id);
-    if (has_capability('moodle/user:viewuseractivitiesreport', $personalcontext)) {
-        if ($course->showreports and (is_viewing($coursecontext, $user) or is_enrolled($coursecontext, $user))) {
+    if ($CFG->usecomments) {
+        $coursecontext = context_course::instance($course->id);
+        if (has_capability('report/comments:view', $coursecontext)) {
             return true;
         }
 
-    } else if ($user->id == $USER->id) {
-        if ($course->showreports and (is_viewing($coursecontext, $USER) or is_enrolled($coursecontext, $USER))) {
-            return true;
+        $personalcontext = context_user::instance($user->id);
+        if (has_capability('moodle/user:viewuseractivitiesreport', $personalcontext)) {
+            if ($course->showreports and (is_viewing($coursecontext, $user) or is_enrolled($coursecontext, $user))) {
+                return true;
+            }
+
+        } else if ($user->id == $USER->id) {
+            if ($course->showreports and (is_viewing($coursecontext, $USER) or is_enrolled($coursecontext, $USER))) {
+                return true;
+            }
         }
     }
     return false;
-}
-
-/**
- * Return a list of page types
- * @param string $pagetype current page type
- * @param stdClass $parentcontext Block's parent context
- * @param stdClass $currentcontext Current context of block
- * @return array
- */
-function report_comments_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    return ['*' => get_string('page-x', 'pagetype'), 'report-*' => get_string('page-report-x', 'pagetype'),
-            'report-comments-*' => get_string('page-report-comments-x',  'report_comments'),
-            'report-comments-index' => get_string('page-report-comments-index',  'report_comments'),
-            'report-comments-user'  => get_string('page-report-comments-user',  'report_comments')];
 }
