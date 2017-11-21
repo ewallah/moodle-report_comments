@@ -20,13 +20,10 @@ Feature: Comments report
       | teacher2 | C2 | editingteacher |
       | student1 | C1 | student |
     And I log in as "teacher1"
-    And I am on site homepage
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add the "Comments" block
     And I add "comment 01" comment to comments block
-    And I am on site homepage
-    And I follow "Course 2"
+    And I am on "Course 2" course homepage
     And I add the "Comments" block
     And I add "comment 02" comment to comments block
     And I add "comment 03" comment to comments block
@@ -50,8 +47,7 @@ Feature: Comments report
   @javascript
   Scenario: See if there are links created on the commnet report.
     Given I log in as "teacher2"
-    And I am on site homepage
-    And I follow "Course 2"
+    And I am on "Course 2" course homepage
     And I navigate to "Comments" node in "Course administration > Reports"
     Then I should not see "comment 01"
     And I should see "comment 02"
@@ -59,7 +55,6 @@ Feature: Comments report
     And I should see "comment 04"
     And I follow "comment 04"
     Then I should see "Test wiki"
-    And I follow "C2"
     And I navigate to "Comments" node in "Course administration > Reports"
     And I follow "comment 02"
     Then I should see "Course 2"
