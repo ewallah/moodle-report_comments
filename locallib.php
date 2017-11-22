@@ -31,7 +31,8 @@ defined('MOODLE_INTERNAL') || die;
  * @param int $userid
  * @param string $sort
  * @return string
- */function report_comments_getusercomments($userid, $sort = 'date') {
+ */
+function report_comments_getusercomments($userid, $sort = 'date') {
     global $CFG, $DB;
     if ($user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname')) {
         $url = new moodle_url('/user/view.php', ['id' => $userid]);
@@ -44,12 +45,12 @@ defined('MOODLE_INTERNAL') || die;
 
     if ($comments = $DB->get_records('comments', ['userid' => $userid], 'timecreated DESC')) {
         foreach ($comments as $comment) {
-            $comment->fullname = $fullname;
-            $comment->time = userdate($comment->timecreated, $strftimeformat);
             $context = context::instance_by_id($comment->contextid, IGNORE_MISSING);
             if (!$context) {
                 continue;
             }
+            $comment->fullname = $fullname;
+            $comment->time = userdate($comment->timecreated, $strftimeformat);
             $contexturl = '';
             switch ($context->contextlevel) {
                 case CONTEXT_BLOCK:

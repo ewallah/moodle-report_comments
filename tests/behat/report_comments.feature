@@ -45,7 +45,7 @@ Feature: Comments report
     And I log out
 
   @javascript
-  Scenario: See if there are links created on the commnet report.
+  Scenario: See if there are links created on the comment report.
     Given I log in as "teacher2"
     And I am on "Course 2" course homepage
     And I navigate to "Comments" node in "Course administration > Reports"
