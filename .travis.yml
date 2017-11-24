@@ -5,7 +5,7 @@ notifications:
     recipients:
         - rdebleu@eWallah.net
 
-sudo: false
+sudo: true
 
 addons:
   firefox: "47.0.1"

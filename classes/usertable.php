@@ -54,8 +54,13 @@ class report_comments_usertable extends table_sql {
         $this->set_sql('id, timecreated, userid, content, format, contextid, component, commentarea, itemid',
            '{comments}', 'userid = :userid', ['userid' => $userid]);
         $this->set_count_sql('SELECT COUNT(id) FROM {comments} WHERE userid = :userid', ['userid' => $userid]);
-        $this->define_columns(['id', 'timecreated', 'userid', 'content', 'action']);
-        $this->define_headers(['', get_string('date'), get_string('user'), get_string('content'), get_string('action')]);
+        if ($download) {
+            $this->define_columns(['id', 'timecreated', 'userid', 'content']);
+            $this->define_headers(['', get_string('date'), get_string('user'), get_string('content')]);
+        } else {
+            $this->define_columns(['id', 'timecreated', 'userid', 'content', 'action']);
+            $this->define_headers(['', get_string('date'), get_string('user'), get_string('content'), get_string('action')]);
+        }
         $this->column_nosort[] = 'action';
         $this->collapsible(false);
         $this->showdownloadbuttonsat = [TABLE_P_BOTTOM];
@@ -69,7 +74,7 @@ class report_comments_usertable extends table_sql {
      * @return string
      */
     public function col_id(stdClass $row) {
-        global $CFG, $USER;
+        global $CFG;
         $context = context::instance_by_id($row->contextid, IGNORE_MISSING);
         if ($context) {
             $row->contexturl = false;
