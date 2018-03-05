@@ -36,6 +36,7 @@ $commentid  = optional_param('commentid', 0, PARAM_INT);
 $action     = optional_param('action', '', PARAM_ALPHA);
 $confirm    = optional_param('confirm', 0, PARAM_INT);
 $sort       = optional_param('tsort', 'date', PARAM_ALPHA);
+$download   = optional_param('download', '', PARAM_ALPHA);
 
 $course = get_course($courseid);
 $context = context_course::instance($courseid);
@@ -85,6 +86,7 @@ if ($action === 'delete') {
 
 echo $OUTPUT->header();
 
+
 $tabl = new flexible_table('admin-comments-compatible');
 
 if ($userid == 0) {
@@ -94,12 +96,19 @@ if ($userid == 0) {
     $tabl->define_headers([get_string('date'), get_string('author', 'search'), get_string('content'), get_string('action')]);
 
 } else {
+    $table = new \report_comments_usertable($userid, $download);
+    if ($table->is_downloading($download)) {
+         $table->out(999, true);
+    } else {
+         $table->out(5, true);
+    }
     $user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname');
     echo html_writer::tag('h3', $user->firstname . ' ' . $user->lastname);
     $comments = report_comments_getusercomments($userid);
     $tabl->define_columns(['date', 'course', 'content', 'action']);
     $tabl->define_headers([get_string('date'), get_string('course'), get_string('content'), get_string('action')]);
 }
+
 
 if (count($comments) == 0) {
     echo $OUTPUT->notification(get_string('nocomments', 'moodle'));

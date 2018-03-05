@@ -36,11 +36,11 @@ function report_comments_extend_navigation_course($navigation, $course, $context
     global $CFG;
     if (has_capability('report/comments:view', $context)) {
         if ($CFG->usecomments) {
-            $url = new moodle_url('/report/comments/index.php', ['course' => $course->id]);
+            $url = new \moodle_url('/report/comments/index.php', ['course' => $course->id]);
             $navigation->add(get_string('comments'), $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         }
         if ($CFG->enablenotes) {
-            $url = new moodle_url('/notes/index.php', ['course' => $course->id]);
+            $url = new \moodle_url('/notes/index.php', ['course' => $course->id]);
             $str = get_string('notes', 'notes');
             $navigation->add($str, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         }
@@ -48,46 +48,26 @@ function report_comments_extend_navigation_course($navigation, $course, $context
 }
 
 /**
- * This function extends the course navigation with the report items
+ * Add nodes to myprofile page.
  *
- * @param navigation_node $navigation The navigation node to extend
- * @param stdClass $user
- * @param stdClass $course The course to object for the report
- */
-function report_comments_extend_navigation_user($navigation, $user, $course) {
-    if (report_comments_can_access_user_report($user, $course)) {
-        $url = new moodle_url('/report/comments/index.php', ['course' => $course->id, 'id' => $user->id]);
-        $navigation->add(get_string('comments'), $url);
-    }
-}
-
-/**
- * Is current user allowed to access this report
+ * @param \core_user\output\myprofile\tree $tree Tree object
+ * @param stdClass $user user object
+ * @param bool $iscurrentuser
+ * @param stdClass $course Course object
  *
- * @param stdClass $user
- * @param stdClass $course
  * @return bool
  */
-function report_comments_can_access_user_report($user, $course) {
-    global $CFG, $USER;
-
-    if ($CFG->usecomments) {
-        $coursecontext = context_course::instance($course->id);
-        if (has_capability('report/comments:view', $coursecontext)) {
-            return true;
-        }
-
-        $personalcontext = context_user::instance($user->id);
-        if (has_capability('moodle/user:viewuseractivitiesreport', $personalcontext)) {
-            if ($course->showreports and (is_viewing($coursecontext, $user) or is_enrolled($coursecontext, $user))) {
-                return true;
-            }
-
-        } else if ($user->id == $USER->id) {
-            if ($course->showreports and (is_viewing($coursecontext, $USER) or is_enrolled($coursecontext, $USER))) {
-                return true;
-            }
-        }
+function report_comments_myprofile_navigation(\core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
+    global $CFG;
+    if (isguestuser($user)) {
+        return false;
+    }
+    $context = context_system::instance();
+    if (has_capability('report/comments:view', $context) and $CFG->usecomments) {
+        $url = new \moodle_url('/report/comments/index.php', ['course' => 1, 'id' => $user->id]);
+        $node = new \core_user\output\myprofile\node('reports', 'comments', get_string('comments'), null, $url);
+        $tree->add_node($node);
+        return true;
     }
     return false;
 }
