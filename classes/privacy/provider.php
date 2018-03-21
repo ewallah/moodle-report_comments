@@ -15,22 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Privacy main class.
  *
  * @package    report_comments
  * @copyright  2017 iplusacademy.org
- * @author     Renaat Debleu <info@eWallah.net>
+ * @author     Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['comments:emailnotifycomment'] = 'Be notified of new comment';
-$string['comments:view'] = 'View comments report';
-$string['eventreportviewed'] = 'Comments report viewed';
-$string['label'] = 'Notifications enabled';
-$string['labelhelp'] = 'Teachers receive a notification when a new comment is made.';
-$string['messageprovider:newcomment'] = 'New comment created';
-$string['page-report-comments-index'] = 'Course comments report';
-$string['page-report-comments-user'] = 'User comments report';
-$string['page-report-comments-x'] = 'Any comments report';
-$string['pluginname'] = 'Comments report';
-$string['privacy:metadata'] = 'The comments report plugin does not store any personal data.';
+namespace report_comments\privacy;
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Privacy main class.
+ *
+ * @package    report_comments
+ * @copyright  2017 iplusacademy.org
+ * @author     Renaat Debleu (www.eWallah.net)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}
