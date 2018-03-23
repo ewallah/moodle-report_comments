@@ -29,14 +29,16 @@ require_once($CFG->libdir . '/tablelib.php');
 /**
  * Extends table_sql to provide a table of user comments
  *
- * @package    report comments
+ * @package    report_comments
  * @copyright  2017 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class report_comments_usertable extends table_sql {
 
+    /** @var string Time format. */
     private $timeformat;
+    /** @var int Counter. */
     private $counter;
 
     /**
