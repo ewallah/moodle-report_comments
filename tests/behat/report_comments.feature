@@ -1,4 +1,4 @@
-@iplus @report @report_comments  @javascript
+@ewallah @report @report_comments  @javascript
 Feature: Comments report
   In order to understand what is going on in my Moodle site
   I need to be able to see where comments are made
