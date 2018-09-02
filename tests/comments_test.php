@@ -24,6 +24,10 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
+
+require_once($CFG->dirroot . '/comment/locallib.php');
+require_once($CFG->dirroot . '/comment/lib.php');
 
 /**
  * Class report_comments_events_testcase
@@ -34,7 +38,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-class report_comments_events_testcase extends advanced_testcase {
+class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Setup testcase.
@@ -67,5 +71,61 @@ class report_comments_events_testcase extends advanced_testcase {
         $url = new moodle_url('/report/comments/index.php', ['course' => $course->id]);
         $this->assertEquals($url, $event->get_url());
         $this->assertEventContextNotUsed($event);
+    }
+
+    /**
+     * Test privacy.
+     */
+    public function test_privacy() {
+        $privacy = new report_comments\privacy\provider();
+        $this->assertEquals($privacy->get_reason(), 'privacy:metadata');
+    }
+
+    /**
+     * Test the usertable.
+     *
+     */
+    public function test_usertable() {
+        $course = $this->getDataGenerator()->create_course();
+        $coursecontext = context_course::instance($course->id);
+        $comment = $this->get_comment_object($coursecontext, $course);
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+        $comment->add('First comment for user 1');
+        $comment->add('Second comment for user 1');
+        $table = new \report_comments_usertable($user->id);
+        $row = new stdClass;
+        $row->contextid = $coursecontext->id;
+        $this->assertEquals(1, $table->col_id($row));
+        $row->timecreated = time();
+        $this->assertContains(date("Y"), $table->col_timecreated($row));
+        $row->content = 'AB';
+        $row->format = 'html';
+        $this->assertContains('text_to_html', $table->col_content($row));
+        $row->contexturl = $coursecontext->get_url();
+        $row->contextid = context_user::instance($user->id);
+        $row->userid = $user->id;
+        $this->assertContains('class="userpicture', $table->col_userid($row));
+        $this->assertContains('value="Delete"', $table->col_action($row));
+    }
+
+    /**
+     * Creates a comment object
+     *
+     * @param  context $context A context object.
+     * @param  stdClass $course A course object.
+     * @return comment The comment object.
+     */
+    protected function get_comment_object($context, $course) {
+        // Comment on course page.
+        $args = new stdClass;
+        $args->context = $context;
+        $args->course = $course;
+        $args->area = 'page_comments';
+        $args->itemid = 0;
+        $args->component = 'block_comments';
+        $comment = new comment($args);
+        $comment->set_post_permission(true);
+        return $comment;
     }
 }

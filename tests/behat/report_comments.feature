@@ -46,17 +46,19 @@ Feature: Comments report
   Scenario: See if there are links created on the comment report.
     Given I log in as "teacher2"
     And I am on "Course 2" course homepage
-    And I navigate to "Comments" node in "Course administration > Reports"
+    And I navigate to "Reports > Comments" in current page administration
     Then I should not see "comment 01"
     And I should see "comment 02"
     And I should see "comment 03"
     And I should see "comment 04"
     And I follow "comment 04"
     Then I should see "Test wiki"
-    And I navigate to "Comments" node in "Course administration > Reports"
+    And I am on "Course 2" course homepage
+    And I navigate to "Reports > Comments" in current page administration
     And I follow "comment 02"
     Then I should see "Course 2"
-    And I navigate to "Comments" node in "Course administration > Reports"
+    And I am on "Course 2" course homepage
+    And I navigate to "Reports > Comments" in current page administration
     And I follow "T1 Teacher1"
     Then I should see "comment 01"
     And I follow "Delete"
