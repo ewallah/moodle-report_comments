@@ -74,12 +74,8 @@ class report_comments_observer {
                                 }
                             }
                         }
-                    } else {
-                        debugging('course not found');
                     }
                 }
-            } else {
-                debugging('empty comment');
             }
         }
     }

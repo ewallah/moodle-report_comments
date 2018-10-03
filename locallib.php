@@ -45,7 +45,7 @@ function report_comments_getusercomments($userid, $sort = 'date') {
 
     if ($comments = $DB->get_records('comments', ['userid' => $userid], 'timecreated DESC')) {
         foreach ($comments as $comment) {
-            $context = context::instance_by_id($comment->contextid, IGNORE_MISSING);
+            $context = context::instance_by_id($comment->contextid);
             if (!$context) {
                 continue;
             }
