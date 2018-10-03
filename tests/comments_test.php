@@ -168,6 +168,11 @@ class report_comments_tests_testcase extends advanced_testcase {
         $table->out(9999, true);
         $data = ob_end_clean();
         $this->assertNotEmpty($data);
+        $table = new \report_comments_usertable($user->id, false);
+        ob_start();
+        $table->out(9999, false);
+        $data = ob_end_clean();
+        $this->assertNotEmpty($data);
     }
 
     /**
@@ -202,17 +207,20 @@ class report_comments_tests_testcase extends advanced_testcase {
      * Tests the report navigation as an admin.
      */
     public function test_navigation() {
-        global $CFG, $PAGE;
+        global $CFG, $PAGE, $USER;
         require_once($CFG->dirroot . '/report/comments/lib.php');
         $context = context_course::instance($this->course->id);
+        $this->setAdminUser();
         $PAGE->set_url('/course/view.php', ['id' => $this->course->id]);
         $tree = new \global_navigation($PAGE);
         report_comments_extend_navigation_course($tree, $this->course, $context);
         $user = $this->getDataGenerator()->create_user();
         $tree = new \core_user\output\myprofile\tree();
-        report_comments_myprofile_navigation($tree, $user, true, $this->course);
+        $this->assertTrue(report_comments_myprofile_navigation($tree, $user, true, $this->course));
         $tree = new \core_user\output\myprofile\tree();
-        report_comments_myprofile_navigation($tree, $this->teacher->id, true, $this->course);
+        $this->assertTrue(report_comments_myprofile_navigation($tree, $this->teacher, true, $this->course));
+        $this->setGuestUser();
+        $this->assertFalse(report_comments_myprofile_navigation($tree, $USER, true, $this->course));
     }
 
     /**

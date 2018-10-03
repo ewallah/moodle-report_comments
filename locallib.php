@@ -53,9 +53,6 @@ function report_comments_getusercomments($userid, $sort = 'date') {
             $comment->time = userdate($comment->timecreated, $strftimeformat);
             $contexturl = '';
             switch ($context->contextlevel) {
-                case CONTEXT_BLOCK:
-                    debugging('Block: ' . $context->instanceid);
-                    break;
                 case CONTEXT_MODULE:
                     $cm = get_coursemodule_from_id('', $context->instanceid);
                     $course = get_course($cm->course);
@@ -72,7 +69,6 @@ function report_comments_getusercomments($userid, $sort = 'date') {
                     $contexturl = course_get_url($course);
                     $comment->fullname = html_writer::link($contexturl, $course->fullname);
                     break;
-
                 default:
                     debugging('Default context: ' . $context->instanceid);
             }

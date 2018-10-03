@@ -40,6 +40,8 @@ class report_comments_usertable extends table_sql {
     private $timeformat;
     /** @var int Counter. */
     private $counter;
+    /** @var bool Download. */
+    public $download;
 
     /**
      * Overridden constructor.
@@ -49,6 +51,7 @@ class report_comments_usertable extends table_sql {
      */
     public function __construct($userid, $download = false) {
         parent::__construct('comments');
+        $this->download = $download;
         $arr = ['course' => 1, 'id' => $userid];
         $this->define_baseurl(new moodle_url('/report/comments/index.php', $arr));
         $this->timeformat = get_string('strftimerecentfull', 'langconfig');
@@ -82,9 +85,6 @@ class report_comments_usertable extends table_sql {
             $row->contexturl = false;
             if (has_capability('report/comments:view', $context)) {
                 switch ($context->contextlevel) {
-                    case CONTEXT_BLOCK:
-                        debugging('Block context: ' . $context->instanceid);
-                        break;
                     case CONTEXT_MODULE:
                         $cm = get_coursemodule_from_id('', $context->instanceid);
                         $base = core_component::get_component_directory('mod_' . $cm->modname);
@@ -97,8 +97,7 @@ class report_comments_usertable extends table_sql {
                         $row->contexturl = course_get_url(get_course($context->instanceid));
                         break;
                     default:
-                        debugging('Default context: ' . $context->instanceid);
-                        break;
+                        throw new comment_exception('invalid context');
                 }
             }
         }
@@ -140,14 +139,16 @@ class report_comments_usertable extends table_sql {
      */
     public function col_userid(stdClass $row) {
         global $DB, $OUTPUT;
+        $s = '';
         if ($row->contexturl) {
             $user = $DB->get_record('user', ['id' => $row->userid], user_picture::fields());
-            if ($this->is_downloading()) {
-                return fullname($user);
+            if ($this->download) {
+                $s = fullname($user);
+            } else {
+                $s = $OUTPUT->user_picture($user);
             }
-            return $OUTPUT->user_picture($user);
         }
-        return '';
+        return $s;
     }
 
     /**
@@ -157,13 +158,14 @@ class report_comments_usertable extends table_sql {
      * @return string
      */
     public function col_action(stdClass $row) {
+        $s = '';
         if (!$this->is_downloading() and $row->contexturl) {
             $arr = $this->baseurl->params();
             $arr['action'] = 'delete';
             $arr['sesskey'] = sesskey();
             $url = new moodle_url($this->baseurl->out_omit_querystring(), $arr);
-            return html_writer::empty_tag('input', ['type' => 'submit', 'formaction' => $url, 'value' => get_string('delete')]);;
+            $s = html_writer::empty_tag('input', ['type' => 'submit', 'formaction' => $url, 'value' => get_string('delete')]);
         }
-        return '';
+        return $s;
     }
 }

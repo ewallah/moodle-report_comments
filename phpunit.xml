@@ -39,9 +39,9 @@
                 <directory suffix=".php">.</directory>
                 <exclude>
                     <directory suffix="_test.php">.</directory>
-                    <directory suffix="settings.php">.</directory>
-                    <directory suffix="index.php">.</directory>
-                    <directory suffix="db/access.php">.</directory>
+                    <file>settings.php</file>
+                    <file>index.php</file>
+                    <file>db/access.php</file>
                 </exclude>
             </whitelist>
         </filter>
