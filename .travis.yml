@@ -32,7 +32,6 @@ env:
   - DB=mariadb MOODLE_BRANCH=master
  
 before_install:
-  - phpenv config-rm xdebug.ini
   - nvm install 8.9
   - nvm use 8.9
   - cd ../..
