@@ -176,6 +176,24 @@ class report_comments_tests_testcase extends advanced_testcase {
     }
 
     /**
+     * Test the invalid usertable.
+     *
+     */
+    public function test_invalid_usertable() {
+        $category = $this->getDataGenerator()->create_category();
+        $categorycontext = context_coursecat::instance($category->id);
+        $this->setAdminUser();
+        $table = new \report_comments_usertable(2);
+        $row = new stdClass;
+        $row->contextid = $categorycontext->id;
+        try {
+            $this->assertEquals(1, $table->col_id($row));
+        } catch (moodle_exception $e) {
+            $this->assertContains('error/invalid context', $e->getMessage());
+        }
+    }
+
+    /**
      * Tests the locallib.
      */
     public function test_locallib() {
