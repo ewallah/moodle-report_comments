@@ -23,9 +23,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
+
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
-
 require_once($CFG->dirroot . '/comment/lib.php');
 
 /**
@@ -36,6 +36,7 @@ require_once($CFG->dirroot . '/comment/lib.php');
  * @copyright  2017 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ * @coversDefaultClass report_comments
  */
 class report_comments_tests_testcase extends advanced_testcase {
 
@@ -83,7 +84,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test the report viewed event.
-     *
+     * @covers report_comments\event\report_viewed
      */
     public function test_report_viewed() {
         $context = context_course::instance($this->course->id);
@@ -104,7 +105,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test observer.
-     *
+     * @covers report_comments\observer
      */
     public function test_observer() {
         $context = context_course::instance($this->course->id);
@@ -128,6 +129,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test privacy.
+     * @covers report_comments\privacy\provider
      */
     public function test_privacy() {
         $privacy = new report_comments\privacy\provider();
@@ -136,7 +138,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test the usertable.
-     *
+     * @covers report_comments\usertable
      */
     public function test_usertable() {
         $coursecontext = context_course::instance($this->course->id);
@@ -148,7 +150,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->comment->add('Second comment for user 2');
         $this->glossarycomment->add('Third comment for user 2');
         $this->glossarycomment->add('Fourt comment for user 2');
-        $table = new \report_comments_usertable($user->id);
+        $table = new \report_comments\usertable($user->id);
         $row = new stdClass;
         $row->contextid = $coursecontext->id;
         $this->assertEquals(1, $table->col_id($row));
@@ -163,12 +165,12 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->assertContains('class="userpicture', $table->col_userid($row));
         $this->assertContains('value="Delete"', $table->col_action($row));
         $this->setAdminUser();
-        $table = new \report_comments_usertable($user->id, true);
+        $table = new \report_comments\usertable($user->id, true);
         ob_start();
         $table->out(9999, true);
         $data = ob_end_clean();
         $this->assertNotEmpty($data);
-        $table = new \report_comments_usertable($user->id, false);
+        $table = new \report_comments\usertable($user->id, false);
         ob_start();
         $table->out(9999, false);
         $data = ob_end_clean();
@@ -177,13 +179,13 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test the invalid usertable.
-     *
+     * @covers report_comments\usertable
      */
     public function test_invalid_usertable() {
         $category = $this->getDataGenerator()->create_category();
         $categorycontext = context_coursecat::instance($category->id);
         $this->setAdminUser();
-        $table = new \report_comments_usertable(2);
+        $table = new \report_comments\usertable(2);
         $row = new stdClass;
         $row->contextid = $categorycontext->id;
         try {

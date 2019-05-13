@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Coverage information for the comments report.
  *
  * @package    report_comments
  * @copyright  2017 iplusacademy.org
@@ -23,10 +23,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019051300;
-$plugin->requires  = 2018051700;
-$plugin->release = '3.5+';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->component = 'report_comments';
+return new class extends phpunit_coverage_info {
+    /** @var array The list of folders relative to the plugin root to whitelist in coverage generation. */
+    protected $whitelistfolders = ['classes'];
+
+    /** @var array The list of files relative to the plugin root to whitelist in coverage generation. */
+    protected $whitelistfiles = [];
+
+    /** @var array The list of folders relative to the plugin root to excludelist in coverage generation. */
+    protected $excludelistfolders = [];
+
+    /** @var array The list of files relative to the plugin root to excludelist in coverage generation. */
+    protected $excludelistfiles = ['tests/coverage.php', 'version.php', 'settings.php', 'index.php'];
+};

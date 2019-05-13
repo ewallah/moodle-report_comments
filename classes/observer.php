@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace report_comments;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -34,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Renaat Debleu (www.eWallah.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class report_comments_observer {
+class observer {
 
     /**
      * Handles the coomment created event.
@@ -47,9 +48,9 @@ class report_comments_observer {
             if (!empty($comment)) {
                 if (!empty($comment->courseid)) {
                     if ($DB->record_exists('course', ['id' => $comment->courseid])) {
-                        $context = context_course::instance($comment->courseid);
+                        $context = \context_course::instance($comment->courseid);
                         $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
-                        $supportuser = core_user::get_support_user();
+                        $supportuser = \core_user::get_support_user();
                         if ($teachers = get_role_users($role->id, $context)) {
                             $sendtext = $CFG->wwwroot . ': '. $USER->firstname . ' ' . $USER->lastname . ' made a comment.';
                             if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {

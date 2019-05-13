@@ -96,7 +96,7 @@ if ($userid == 0) {
     $tabl->define_headers([get_string('date'), get_string('author', 'search'), get_string('content'), get_string('action')]);
 
 } else {
-    $table = new \report_comments_usertable($userid, $download);
+    $table = new \report_comments\usertable($userid, $download);
     if ($table->is_downloading($download)) {
          $table->out(999, true);
     } else {

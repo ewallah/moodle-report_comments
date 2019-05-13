@@ -22,6 +22,7 @@
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace report_comments;
 
 defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/tablelib.php');
@@ -34,12 +35,12 @@ require_once($CFG->libdir . '/tablelib.php');
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class report_comments_usertable extends table_sql {
+class usertable extends \table_sql {
 
     /** @var string Time format. */
-    private $timeformat;
+    protected $timeformat;
     /** @var int Counter. */
-    private $counter;
+    protected $counter;
     /** @var bool Download. */
     public $download;
 
@@ -53,7 +54,7 @@ class report_comments_usertable extends table_sql {
         parent::__construct('comments');
         $this->download = $download;
         $arr = ['course' => 1, 'id' => $userid];
-        $this->define_baseurl(new moodle_url('/report/comments/index.php', $arr));
+        $this->define_baseurl(new \moodle_url('/report/comments/index.php', $arr));
         $this->timeformat = get_string('strftimerecentfull', 'langconfig');
         $this->counter = 1;
         $this->set_sql('id, timecreated, userid, content, format, contextid, component, commentarea, itemid',
@@ -78,26 +79,26 @@ class report_comments_usertable extends table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_id(stdClass $row) {
+    public function col_id(\stdClass $row) {
         global $CFG;
-        $context = context::instance_by_id($row->contextid, IGNORE_MISSING);
+        $context = \context::instance_by_id($row->contextid, IGNORE_MISSING);
         if ($context) {
             $row->contexturl = false;
             if (has_capability('report/comments:view', $context)) {
                 switch ($context->contextlevel) {
                     case CONTEXT_MODULE:
                         $cm = get_coursemodule_from_id('', $context->instanceid);
-                        $base = core_component::get_component_directory('mod_' . $cm->modname);
+                        $base = \core_component::get_component_directory('mod_' . $cm->modname);
                         if (file_exists("$base/view.php")) {
                             $base = substr($base, strlen($CFG->dirroot));
-                            $row->contexturl = new moodle_url("$base/view.php", ['id' => $cm->id]);
+                            $row->contexturl = new \moodle_url("$base/view.php", ['id' => $cm->id]);
                         }
                         break;
                     case CONTEXT_COURSE:
                         $row->contexturl = course_get_url(get_course($context->instanceid));
                         break;
                     default:
-                        throw new comment_exception('invalid context');
+                        throw new \comment_exception('invalid context');
                 }
             }
         }
@@ -114,9 +115,9 @@ class report_comments_usertable extends table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_timecreated(stdClass $row) {
+    public function col_timecreated(\stdClass $row) {
         if ($row->contexturl) {
-            return html_writer::link($row->contexturl, userdate($row->timecreated, $this->timeformat));
+            return \html_writer::link($row->contexturl, userdate($row->timecreated, $this->timeformat));
         }
         return userdate($row->timecreated, $this->timeformat);
     }
@@ -127,7 +128,7 @@ class report_comments_usertable extends table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_content(stdClass $row) {
+    public function col_content(\stdClass $row) {
         return format_text($row->content, $row->format);
     }
 
@@ -137,11 +138,11 @@ class report_comments_usertable extends table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_userid(stdClass $row) {
+    public function col_userid(\stdClass $row) {
         global $DB, $OUTPUT;
         $s = '';
         if ($row->contexturl) {
-            $user = $DB->get_record('user', ['id' => $row->userid], user_picture::fields());
+            $user = $DB->get_record('user', ['id' => $row->userid], \user_picture::fields());
             if ($this->download) {
                 $s = fullname($user);
             } else {
@@ -157,14 +158,14 @@ class report_comments_usertable extends table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_action(stdClass $row) {
+    public function col_action(\stdClass $row) {
         $s = '';
         if (!$this->is_downloading() and $row->contexturl) {
             $arr = $this->baseurl->params();
             $arr['action'] = 'delete';
             $arr['sesskey'] = sesskey();
-            $url = new moodle_url($this->baseurl->out_omit_querystring(), $arr);
-            $s = html_writer::empty_tag('input', ['type' => 'submit', 'formaction' => $url, 'value' => get_string('delete')]);
+            $url = new \moodle_url($this->baseurl->out_omit_querystring(), $arr);
+            $s = \html_writer::empty_tag('input', ['type' => 'submit', 'formaction' => $url, 'value' => get_string('delete')]);
         }
         return $s;
     }
