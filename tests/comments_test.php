@@ -285,4 +285,30 @@ class report_comments_tests_testcase extends advanced_testcase {
         $comment->set_post_permission(true);
         return $comment;
     }
+
+    /**
+     * Test index file.
+     */
+    public function test_index_coding_error() {
+        global $CFG, $DB, $PAGE;
+        chdir($CFG->dirroot . '/report/comments');
+        $generator = $this->getDataGenerator();
+        $user = $generator->create_user();
+        $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        $generator->enrol_user($user->id, $this->course->id, $role->shortname);
+        $this->setUser($user);
+        $_POST['course'] = $this->course->id;
+        $_POST['id'] = $user->id;
+        $this->expectException(\moodle_exception::class);
+        $this->expectExceptionMessage('Coding error detected, it must be fixed by a programmer');
+        include($CFG->dirroot . '/report/comments/index.php');
+    }
+
+    /**
+     * Test coverage file.
+     */
+    public function test_coverage_file() {
+        global $CFG;
+        include($CFG->dirroot . '/report/comments/tests/coverage.php');
+    }
 }

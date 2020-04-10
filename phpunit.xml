@@ -38,10 +38,8 @@
         <whitelist>
             <directory suffix=".php">classes</directory>
             <exclude>
-                <file>tests/coverage.php</file>
                 <file>version.php</file>
                 <file>settings.php</file>
-                <file>index.php</file>
             </exclude>
         </whitelist>
 
