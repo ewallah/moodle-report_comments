@@ -38,7 +38,7 @@ function report_comments_getusercomments($userid, $sort = 'date') {
         $url = new moodle_url('/user/view.php', ['id' => $userid]);
         $fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
     } else {
-        return '';
+        return [];
     }
     $formatoptions = ['overflowdiv' => true];
     $strftimeformat = get_string('strftimerecentfull', 'langconfig');
@@ -76,7 +76,7 @@ function report_comments_getusercomments($userid, $sort = 'date') {
         }
         return sortcomments($comments, $sort);
     }
-    return '';
+    return [];
 }
 
 /**
@@ -84,7 +84,7 @@ function report_comments_getusercomments($userid, $sort = 'date') {
  *
  * @param int $courseid
  * @param string $sort
- * @return string
+ * @return array
  */
 function report_comments_getcoursecomments($courseid, $sort = 'date') {
     global $CFG, $DB;

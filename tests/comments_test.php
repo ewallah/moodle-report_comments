@@ -211,7 +211,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->glossarycomment->add('Fourt comment for user 1');
         $this->setUser($this->teacher->id);
         $results = report_comments_getusercomments(8888);
-        $this->assertEquals('', $results);
+        $this->assertEquals([], $results);
         $results = report_comments_getusercomments($user->id);
         $this->assertCount(6, $results);
         $results = report_comments_getusercomments($user->id, 'content');
@@ -269,7 +269,7 @@ class report_comments_tests_testcase extends advanced_testcase {
      * @return comment The comment object.
      */
     protected function get_glossarycomment_object($course) {
-        $glossary = $this->getDataGenerator()->create_module('glossary', ['course' => $this->course]);
+        $glossary = $this->getDataGenerator()->create_module('glossary', ['course' => $course]);
         $glossarygenerator = $this->getDataGenerator()->get_plugin_generator('mod_glossary');
         $entry = $glossarygenerator->create_content($glossary);
         $cm = get_coursemodule_from_instance('glossary', $glossary->id, $this->course->id);
