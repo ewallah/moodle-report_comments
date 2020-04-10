@@ -44,14 +44,14 @@ $context = context_course::instance($courseid);
 $url = '/report/comments/index.php';
 $arr = ['course' => $courseid];
 
-$PAGE->set_url(new moodle_url($url, $arr));
-$PAGE->set_pagelayout('report');
-
-require_login($course);
+require_login();
 require_capability('report/comments:view', $context);
 
 $strcomments = get_string('comments');
 
+$PAGE->set_context($context);
+$PAGE->set_url(new moodle_url($url, $arr));
+$PAGE->set_pagelayout('report');
 $PAGE->set_title($strcomments);
 $PAGE->set_heading($strcomments);
 
@@ -85,7 +85,6 @@ if ($action === 'delete') {
 }
 
 echo $OUTPUT->header();
-
 
 $tabl = new flexible_table('admin-comments-compatible');
 

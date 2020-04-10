@@ -290,18 +290,17 @@ class report_comments_tests_testcase extends advanced_testcase {
      * Test index file.
      */
     public function test_index_coding_error() {
-        global $CFG, $DB, $PAGE;
+        global $CFG, $DB, $OUTPUT, $PAGE;
         chdir($CFG->dirroot . '/report/comments');
         $generator = $this->getDataGenerator();
         $user = $generator->create_user();
         $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
         $generator->enrol_user($user->id, $this->course->id, $role->shortname);
-        $this->setUser($user);
         $_POST['course'] = $this->course->id;
-        $_POST['id'] = $user->id;
-        $this->expectException(\moodle_exception::class);
-        $this->expectExceptionMessage('Coding error detected, it must be fixed by a programmer');
+        ob_start();
         include($CFG->dirroot . '/report/comments/index.php');
+        $html = ob_get_clean();
+        $this->assertNotContains('No comments', $html);
     }
 
     /**
