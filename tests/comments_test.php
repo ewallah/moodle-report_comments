@@ -289,7 +289,7 @@ class report_comments_tests_testcase extends advanced_testcase {
     /**
      * Test index file.
      */
-    public function test_index_coding_error() {
+    public function test_index_file() {
         global $CFG, $DB, $OUTPUT, $PAGE;
         chdir($CFG->dirroot . '/report/comments');
         $generator = $this->getDataGenerator();
@@ -301,6 +301,24 @@ class report_comments_tests_testcase extends advanced_testcase {
         include($CFG->dirroot . '/report/comments/index.php');
         $html = ob_get_clean();
         $this->assertNotContains('No comments', $html);
+    }
+
+    /**
+     * Test index file user.
+     */
+    public function test_index_file_user() {
+        global $CFG, $DB, $OUTPUT, $PAGE;
+        chdir($CFG->dirroot . '/report/comments');
+        $generator = $this->getDataGenerator();
+        $user = $generator->create_user();
+        $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        $generator->enrol_user($user->id, $this->course->id, $role->shortname);
+        $_POST['course'] = $this->course->id;
+        $_POST['id'] = $user->id;
+        ob_start();
+        include($CFG->dirroot . '/report/comments/index.php');
+        $html = ob_get_clean();
+        $this->assertContains('No comments', $html);
     }
 
     /**
