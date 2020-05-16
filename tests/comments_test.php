@@ -320,12 +320,4 @@ class report_comments_tests_testcase extends advanced_testcase {
         $html = ob_get_clean();
         $this->assertContains('No comments', $html);
     }
-
-    /**
-     * Test coverage file.
-     */
-    public function test_coverage_file() {
-        global $CFG;
-        include($CFG->dirroot . '/report/comments/tests/coverage.php');
-    }
 }
