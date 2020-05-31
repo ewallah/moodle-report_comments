@@ -113,18 +113,15 @@ class report_comments_tests_testcase extends advanced_testcase {
         $messagesink = $this->redirectMessages();
         $this->comment->add('First comment');
         $events = $sink->get_events();
-        while ($task = \core\task\manager::get_next_adhoc_task(time())) {
-            $task->execute();
-            \core\task\manager::adhoc_task_complete($task);
-        }
         $this->assertCount(1, $events);
         $event = array_pop($events);
         $this->assertInstanceOf('\core\event\comment_created', $event);
         $this->assertEquals($context, $event->get_context());
         $this->assertEventContextNotUsed($event);
         $this->assertDebuggingNotCalled();
+        \report_comments\observer::commentcreated($event);
         $messages = $messagesink->get_messages();
-        $this->assertCount(0, $messages);
+        $this->assertCount(1, $messages);
     }
 
     /**
