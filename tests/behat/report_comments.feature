@@ -1,4 +1,4 @@
-@ewallah @report @report_comments  @javascript
+@ewallah @report @report_comments @javascript
 Feature: Comments report
   In order to understand what is going on in my Moodle site
   I need to be able to see where comments are made
@@ -44,8 +44,7 @@ Feature: Comments report
     And I log out
 
   Scenario: See if there are links created on the comment report.
-    Given I log in as "teacher2"
-    And I am on "Course 2" course homepage
+    When I am on the "C2" "Course" page logged in as "teacher2"
     And I navigate to "Reports > Comments" in current page administration
     Then I should not see "comment 01"
     And I should see "comment 02"
@@ -64,3 +63,8 @@ Feature: Comments report
     And I follow "Delete"
     And I click on "Delete" "button"
     Then I should see "comment 02"
+
+  Scenario: See comments as a student.
+    When I am on the "C1" "Course" page logged in as "student1"
+    Then I should see "comment 01"
+    And I should not see "comment 02"
