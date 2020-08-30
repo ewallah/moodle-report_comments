@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/comment/lib.php');
  * @copyright  2017 iplusacademy.org
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
- * @coversDefaultClass report_comments
+ * @coversDefaultClass \report_comments
  */
 class report_comments_tests_testcase extends advanced_testcase {
 
@@ -84,7 +84,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test the report viewed event.
-     * @covers report_comments\event\report_viewed
+     * @coversDefaultClass \report_comments\event\report_viewed
      */
     public function test_report_viewed() {
         $context = context_course::instance($this->course->id);
@@ -105,7 +105,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test observer.
-     * @covers report_comments\observer
+     * @coversDefaultClass \report_comments\observer
      */
     public function test_observer() {
         $context = context_course::instance($this->course->id);
@@ -126,7 +126,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test privacy.
-     * @covers report_comments\privacy\provider
+     * @coversDefaultClass \report_comments\privacy\provider
      */
     public function test_privacy() {
         $privacy = new report_comments\privacy\provider();
@@ -135,7 +135,7 @@ class report_comments_tests_testcase extends advanced_testcase {
 
     /**
      * Test the usertable.
-     * @covers report_comments\usertable
+     * @coversDefaultClass \report_comments\usertable
      */
     public function test_usertable() {
         $coursecontext = context_course::instance($this->course->id);
