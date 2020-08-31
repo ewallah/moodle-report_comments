@@ -317,4 +317,21 @@ class report_comments_tests_testcase extends advanced_testcase {
         $html = ob_get_clean();
         $this->assertContains('No comments', $html);
     }
+
+    /**
+     * Test index file comment.
+     */
+    public function test_index_file_comment() {
+        global $CFG, $DB, $OUTPUT, $PAGE;
+        chdir($CFG->dirroot . '/report/comments');
+        $comments = $DB->get_records('comments');
+        $comment = reset($comments);
+        $_POST['course'] = $this->course->id;
+        $_POST['commentid'] = $comment->id;
+        $_POST['action'] = 'delete';
+        $_POST['confirm'] = 1;
+        $this->expectException('moodle_exception');
+        $this->expectExceptionMessage('A required parameter (sesskey) was missing');
+        include($CFG->dirroot . '/report/comments/index.php');
+    }
 }
