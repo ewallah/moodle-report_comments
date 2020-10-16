@@ -49,9 +49,13 @@ require_capability('report/comments:view', $context);
 
 $strcomments = get_string('comments');
 
-$PAGE->set_context($context);
-$PAGE->set_url(new moodle_url($url, $arr));
+if ($courseid > 1) {
+    $PAGE->set_course($course);
+}
 $PAGE->set_pagelayout('report');
+$PAGE->set_url(new moodle_url($url, $arr));
+$PAGE->set_context($context);
+$PAGE->set_pagetype('report-comments');
 $PAGE->set_title($strcomments);
 $PAGE->set_heading($strcomments);
 
