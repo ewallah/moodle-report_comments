@@ -6,4 +6,4 @@ For a teacher it is not easy to have a quick and complete view who commented wha
 
 Moreover, when someone post a comment, a notification is generated for all teachers.
 
-https://travis-ci.org/ewallah/moodle-report_comments.svg?branch=master
+[![Build Status](https://travis-ci.com/ewallah/moodle-report_comments.svg?branch=master)](https://travis-ci.com/ewallah/moodle-report_comments)
