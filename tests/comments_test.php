@@ -207,17 +207,13 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->glossarycomment->add('Fourt comment for user 1');
         $this->glossarycomment->add('Fourt comment for user 1');
         $this->setUser($this->teacher->id);
-        $results = report_comments_getusercomments(8888);
-        $this->assertEquals([], $results);
-        $results = report_comments_getusercomments($user->id);
-        $this->assertCount(6, $results);
-        $results = report_comments_getusercomments($user->id, 'content');
-        $results = report_comments_getusercomments($user->id, 'content');
-        $this->assertCount(6, $results);
-        $results = report_comments_getusercomments($user->id, 'author');
-        $this->assertCount(6, $results);
-        $results = report_comments_getcoursecomments($this->course->id);
-        $this->assertCount(9, $results);
+        $this->assertEquals([], report_comments_getusercomments(8888));
+        $this->assertCount(6, report_comments_getusercomments($user->id));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'content'));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'content'));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'author'));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'author'));
+        $this->assertCount(9, report_comments_getcoursecomments($this->course->id));
     }
 
     /**

@@ -30,53 +30,48 @@ defined('MOODLE_INTERNAL') || die;
  *
  * @param int $userid
  * @param string $sort
- * @return string
+ * @return array
  */
-function report_comments_getusercomments($userid, $sort = 'date') {
+function report_comments_getusercomments($userid, $sort = 'date'):array {
     global $CFG, $DB;
+    $comments = [];
     if ($user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname')) {
         $url = new moodle_url('/user/view.php', ['id' => $userid]);
         $fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
-    } else {
-        return [];
-    }
-    $formatoptions = ['overflowdiv' => true];
-    $strftimeformat = get_string('strftimerecentfull', 'langconfig');
+        $format = ['overflowdiv' => true];
+        $strftimeformat = get_string('strftimerecentfull', 'langconfig');
 
-    if ($comments = $DB->get_records('comments', ['userid' => $userid], 'timecreated DESC')) {
-        foreach ($comments as $comment) {
-            $context = context::instance_by_id($comment->contextid);
-            if (!$context) {
-                continue;
+        if ($comments = $DB->get_records('comments', ['userid' => $userid], 'timecreated DESC')) {
+            foreach ($comments as $comment) {
+                $context = context::instance_by_id($comment->contextid);
+                $comment->fullname = $fullname;
+                $comment->time = userdate($comment->timecreated, $strftimeformat);
+                $contexturl = '';
+                switch ($context->contextlevel) {
+                    case CONTEXT_MODULE:
+                        $cm = get_coursemodule_from_id('', $context->instanceid);
+                        $course = get_course($cm->course);
+                        $contexturl = course_get_url($course);
+                        $comment->fullname = html_writer::link($contexturl, $course->fullname);
+                        $base = core_component::get_component_directory('mod_' . $cm->modname);
+                        if (file_exists("$base/view.php")) {
+                            $base = substr($base, strlen($CFG->dirroot));
+                            $contexturl = new moodle_url("$base/view.php", ['id' => $cm->id]);
+                        }
+                        break;
+                    case CONTEXT_COURSE:
+                        $course = get_course($context->instanceid);
+                        $contexturl = course_get_url($course);
+                        $comment->fullname = html_writer::link($contexturl, $course->fullname);
+                        break;
+                    default:
+                        debugging('Default context: ' . $context->instanceid);
+                }
+                $comment->content = html_writer::link($contexturl, format_text($comment->content, $comment->format, $format));
             }
-            $comment->fullname = $fullname;
-            $comment->time = userdate($comment->timecreated, $strftimeformat);
-            $contexturl = '';
-            switch ($context->contextlevel) {
-                case CONTEXT_MODULE:
-                    $cm = get_coursemodule_from_id('', $context->instanceid);
-                    $course = get_course($cm->course);
-                    $contexturl = course_get_url($course);
-                    $comment->fullname = html_writer::link($contexturl, $course->fullname);
-                    $base = core_component::get_component_directory('mod_' . $cm->modname);
-                    if (file_exists("$base/view.php")) {
-                        $base = substr($base, strlen($CFG->dirroot));
-                        $contexturl = new moodle_url("$base/view.php", ['id' => $cm->id]);
-                    }
-                    break;
-                case CONTEXT_COURSE:
-                    $course = get_course($context->instanceid);
-                    $contexturl = course_get_url($course);
-                    $comment->fullname = html_writer::link($contexturl, $course->fullname);
-                    break;
-                default:
-                    debugging('Default context: ' . $context->instanceid);
-            }
-            $comment->content = html_writer::link($contexturl, format_text($comment->content, $comment->format, $formatoptions));
         }
-        return sortcomments($comments, $sort);
     }
-    return [];
+    return sortcomments($comments, $sort);
 }
 
 /**
@@ -86,9 +81,9 @@ function report_comments_getusercomments($userid, $sort = 'date') {
  * @param string $sort
  * @return array
  */
-function report_comments_getcoursecomments($courseid, $sort = 'date') {
+function report_comments_getcoursecomments($courseid, $sort = 'date'):array {
     global $CFG, $DB;
-    $formatoptions = ['overflowdiv' => true];
+    $format = ['overflowdiv' => true];
     $strftimeformat = get_string('strftimerecentfull', 'langconfig');
     $context = context_course::instance($courseid);
     $comments = $DB->get_records('comments', ['contextid' => $context->id]);
@@ -98,7 +93,7 @@ function report_comments_getcoursecomments($courseid, $sort = 'date') {
         $comment->fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
         $comment->time = userdate($comment->timecreated, $strftimeformat);
         $url = course_get_url($courseid);
-        $comment->content = html_writer::link($url, format_text($comment->content, $comment->format, $formatoptions));
+        $comment->content = html_writer::link($url, format_text($comment->content, $comment->format, $format));
     }
 
     $rawmods = get_course_mods($courseid);
@@ -114,12 +109,11 @@ function report_comments_getcoursecomments($courseid, $sort = 'date') {
                     if (file_exists("$base/view.php")) {
                         $base = substr($base, strlen($CFG->dirroot));
                         $url = new moodle_url("$base/view.php", ['id' => $mod->id]);
-                        $str = format_text($comment->content, $comment->format, $formatoptions);
+                        $str = format_text($comment->content, $comment->format, $format);
                         $comment->content = html_writer::link($url, $str);
                     } else {
-                        $comment->content = format_text($comment->content, $comment->format, $formatoptions);
+                        $comment->content = format_text($comment->content, $comment->format, $format);
                     }
-
                     $comments[] = $comment;
                 }
             }
@@ -136,16 +130,12 @@ function report_comments_getcoursecomments($courseid, $sort = 'date') {
  * @return array
  */
 function sortcomments($comments, $sort) {
-    switch ($sort) {
-        case 'date':
-            usort($comments, "cmpdate");
-            break;
-        case 'content':
-            usort($comments, "cmpcontent");
-            break;
-        case 'author':
-            usort($comments, "cmpid");
-            break;
+    if ($sort == 'date') {
+        usort($comments, "cmpdate");
+    } else if ($sort == 'content') {
+        usort($comments, "cmpcontent");
+    } else if ($sort == 'author') {
+        usort($comments, "cmpid");
     }
     return $comments;
 }
@@ -186,9 +176,6 @@ function cmpdaterev($a, $b) {
  * @return bool
  */
 function cmpid($a, $b) {
-    if ($a->id == $b->id) {
-        return 0;
-    }
     return ($a->id < $b->id) ? -1 : 1;
 }
 
