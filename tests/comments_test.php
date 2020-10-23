@@ -63,7 +63,7 @@ class report_comments_tests_testcase extends advanced_testcase {
     /**
      * Setup testcase.
      */
-    public function setUp() {
+    public function setUp():void {
         global $CFG, $DB;
         $this->setAdminUser();
         $this->resetAfterTest();
@@ -91,7 +91,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         require_capability('report/comments:view', $context);
         $event = \report_comments\event\report_viewed::create(['context' => $context]);
         $this->assertEquals('Comments report viewed', $event->get_name());
-        $this->assertContains('The user with id ', $event->get_description());
+        $this->assertStringContainsString('The user with id ', $event->get_description());
         $sink = $this->redirectEvents();
         $event->trigger();
         $events = $sink->get_events();
@@ -152,15 +152,15 @@ class report_comments_tests_testcase extends advanced_testcase {
         $row->contextid = $coursecontext->id;
         $this->assertEquals(1, $table->col_id($row));
         $row->timecreated = time();
-        $this->assertContains(date("Y"), $table->col_timecreated($row));
+        $this->assertStringContainsString(date("Y"), $table->col_timecreated($row));
         $row->content = 'AB';
         $row->format = 'html';
-        $this->assertContains('text_to_html', $table->col_content($row));
+        $this->assertStringContainsString('text_to_html', $table->col_content($row));
         $row->contexturl = $coursecontext->get_url();
         $row->contextid = context_user::instance($user->id);
         $row->userid = $user->id;
-        $this->assertContains('class="userpicture', $table->col_userid($row));
-        $this->assertContains('value="Delete"', $table->col_action($row));
+        $this->assertStringContainsString('class="userpicture', $table->col_userid($row));
+        $this->assertStringContainsString('value="Delete"', $table->col_action($row));
         $this->setAdminUser();
         $table = new \report_comments\usertable($user->id, true);
         ob_start();
@@ -188,7 +188,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         try {
             $this->assertEquals(1, $table->col_id($row));
         } catch (moodle_exception $e) {
-            $this->assertContains('error/invalid context', $e->getMessage());
+            $this->assertStringContainsString('error/invalid context', $e->getMessage());
         }
     }
 
