@@ -237,6 +237,16 @@ class report_comments_tests_testcase extends advanced_testcase {
     }
 
     /**
+     * Tests settings.
+     */
+    public function test_settings() {
+        global $ADMIN, $CFG;
+        require_once($CFG->dirroot . '/lib/adminlib.php');
+        $ADMIN = admin_get_root(true, true);
+        $this->assertTrue($ADMIN->fulltree);
+    }
+
+    /**
      * Creates a comment object
      *
      * @param  stdClass $course A course object.

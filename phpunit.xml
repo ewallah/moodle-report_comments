@@ -28,18 +28,17 @@
         <!--<const name="TEST_EXTERNAL_FILES_HTTPS_URL" value="https://download.moodle.org/unittest"/> uncomment and alter to fetch external test files from alternative location-->
     </php>
 
-
     <testsuites>
         <testsuite name="report_comments_testsuite">
             <directory suffix="_test.php">.</directory>
         </testsuite>
     </testsuites>
+
     <filter>
         <whitelist>
             <directory suffix=".php">classes</directory>
             <exclude>
                 <file>version.php</file>
-                <file>settings.php</file>
             </exclude>
         </whitelist>
 
