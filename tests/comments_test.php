@@ -214,6 +214,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->assertCount(6, report_comments_getusercomments($user->id, 'author'));
         $this->assertCount(6, report_comments_getusercomments($user->id, 'author'));
         $this->assertCount(9, report_comments_getcoursecomments($this->course->id));
+        $this->assertCount(2, report_comments_page_type_list(null, null, null));
     }
 
     /**
@@ -234,6 +235,14 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->assertTrue(report_comments_myprofile_navigation($tree, $this->teacher, true, $this->course));
         $this->setGuestUser();
         $this->assertFalse(report_comments_myprofile_navigation($tree, $USER, true, $this->course));
+    }
+
+    /**
+     * Tests orther files.
+     */
+    public function test_other() {
+        global $CFG;
+        require_once($CFG->dirroot . '/report/comments/db/access.php');
     }
 
     /**
