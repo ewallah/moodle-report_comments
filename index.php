@@ -36,6 +36,7 @@ $commentid  = optional_param('commentid', 0, PARAM_INT);
 $action     = optional_param('action', '', PARAM_ALPHA);
 $confirm    = optional_param('confirm', 0, PARAM_INT);
 $sort       = optional_param('tsort', 'date', PARAM_ALPHA);
+$sortdir    = optional_param('tdir', 3, PARAM_INT);
 $download   = optional_param('download', '', PARAM_ALPHA);
 
 $course = get_course($courseid);
@@ -94,7 +95,7 @@ $tabl = new flexible_table('admin-comments-compatible');
 
 if ($userid == 0) {
     echo html_writer::tag('h3', $course->fullname);
-    $comments = report_comments_getcoursecomments($courseid, $sort);
+    $comments = report_comments_getcoursecomments($courseid, $sort, $sortdir);
     $tabl->define_columns(['date', 'author', 'content', 'action']);
     $tabl->define_headers([get_string('date'), get_string('author', 'search'), get_string('content'), get_string('action')]);
 

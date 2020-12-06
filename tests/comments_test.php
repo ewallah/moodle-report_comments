@@ -210,9 +210,9 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->assertEquals([], report_comments_getusercomments(8888));
         $this->assertCount(6, report_comments_getusercomments($user->id));
         $this->assertCount(6, report_comments_getusercomments($user->id, 'content'));
-        $this->assertCount(6, report_comments_getusercomments($user->id, 'content'));
-        $this->assertCount(6, report_comments_getusercomments($user->id, 'author'));
-        $this->assertCount(6, report_comments_getusercomments($user->id, 'author'));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'content', 4));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'author', 3));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'author', 4));
         $this->assertCount(9, report_comments_getcoursecomments($this->course->id));
         $this->assertCount(2, report_comments_page_type_list(null, null, null));
     }

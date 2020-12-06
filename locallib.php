@@ -30,9 +30,10 @@ defined('MOODLE_INTERNAL') || die;
  *
  * @param int $userid
  * @param string $sort
+ * @param int $sortdir
  * @return array
  */
-function report_comments_getusercomments($userid, $sort = 'date'):array {
+function report_comments_getusercomments($userid, $sort = 'date', $sortdir = 3):array {
     global $CFG, $DB;
     $comments = [];
     if ($user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname')) {
@@ -71,7 +72,7 @@ function report_comments_getusercomments($userid, $sort = 'date'):array {
             }
         }
     }
-    return sortcomments($comments, $sort);
+    return sortcomments($comments, $sort, $sortdir);
 }
 
 /**
@@ -79,9 +80,10 @@ function report_comments_getusercomments($userid, $sort = 'date'):array {
  *
  * @param int $courseid
  * @param string $sort
+ * @param int $sortdir
  * @return array
  */
-function report_comments_getcoursecomments($courseid, $sort = 'date'):array {
+function report_comments_getcoursecomments($courseid, $sort = 'date', $sortdir = 3):array {
     global $CFG, $DB;
     $format = ['overflowdiv' => true];
     $strftimeformat = get_string('strftimerecentfull', 'langconfig');
@@ -127,15 +129,16 @@ function report_comments_getcoursecomments($courseid, $sort = 'date'):array {
  *
  * @param array $comments
  * @param string $sort
+ * @param int $sortdir
  * @return array
  */
-function sortcomments($comments, $sort) {
+function sortcomments($comments, $sort, $sortdir = 3) {
     if ($sort == 'date') {
-        usort($comments, "cmpdate");
+        usort($comments, $sortdir == 4 ? 'cmpdate' : 'cmpdaterev');
     } else if ($sort == 'content') {
-        usort($comments, "cmpcontent");
+        usort($comments, $sortdir == 4 ? 'cmpcontent' : 'cmpcontentrev');
     } else if ($sort == 'author') {
-        usort($comments, "cmpid");
+        usort($comments, $sortdir == 4 ? 'cmpid' : 'cmpidrev');
     }
     return $comments;
 }
