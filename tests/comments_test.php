@@ -209,10 +209,12 @@ class report_comments_tests_testcase extends advanced_testcase {
         $this->setUser($this->teacher->id);
         $this->assertEquals([], report_comments_getusercomments(8888));
         $this->assertCount(6, report_comments_getusercomments($user->id));
-        $this->assertCount(6, report_comments_getusercomments($user->id, 'content'));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'content', 3));
         $this->assertCount(6, report_comments_getusercomments($user->id, 'content', 4));
         $this->assertCount(6, report_comments_getusercomments($user->id, 'author', 3));
         $this->assertCount(6, report_comments_getusercomments($user->id, 'author', 4));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'date', 3));
+        $this->assertCount(6, report_comments_getusercomments($user->id, 'date', 4));
         $this->assertCount(9, report_comments_getcoursecomments($this->course->id));
         $this->assertCount(2, report_comments_page_type_list(null, null, null));
     }
@@ -241,8 +243,14 @@ class report_comments_tests_testcase extends advanced_testcase {
      * Tests orther files.
      */
     public function test_other() {
-        global $CFG;
+        global $CFG, $PAGE;
+        $this->setAdminUser();
+        $PAGE->set_url('/course/view.php', ['id' => $this->course->id]);
         require_once($CFG->dirroot . '/report/comments/db/access.php');
+        chdir($CFG->dirroot . '/report/comments');
+        $_POST['course'] = $this->course->id;
+        $this->expectException(\moodle_exception::class);
+        include($CFG->dirroot . '/report/comments/index.php');
     }
 
     /**

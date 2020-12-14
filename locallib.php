@@ -121,7 +121,7 @@ function report_comments_getcoursecomments($courseid, $sort = 'date', $sortdir =
             }
         }
     }
-    return sortcomments($comments, $sort);
+    return sortcomments($comments, $sort, $sortdir);
 }
 
 /**
@@ -151,9 +151,6 @@ function sortcomments($comments, $sort, $sortdir = 3) {
  * @return bool
  */
 function cmpdate($a, $b) {
-    if ($a->timecreated == $b->timecreated) {
-        return 0;
-    }
     return ($a->timecreated < $b->timecreated) ? -1 : 1;
 }
 
@@ -165,9 +162,6 @@ function cmpdate($a, $b) {
  * @return bool
  */
 function cmpdaterev($a, $b) {
-    if ($a->timecreated == $b->timecreated) {
-        return 0;
-    }
     return ($a->timecreated < $b->timecreated) ? 1 : -1;
 }
 
@@ -190,9 +184,6 @@ function cmpid($a, $b) {
  * @return bool
  */
 function cmpidrev($a, $b) {
-    if ($a->id == $b->id) {
-        return 0;
-    }
     return ($a->id < $b->id) ? 1 : -1;
 }
 
@@ -204,9 +195,6 @@ function cmpidrev($a, $b) {
  * @return bool
  */
 function cmpcontent($a, $b) {
-    if ($a->content == $b->content) {
-        return 0;
-    }
     return ($a->content < $b->content) ? -1 : 1;
 }
 
@@ -218,8 +206,5 @@ function cmpcontent($a, $b) {
  * @return bool
  */
 function cmpcontentrev($a, $b) {
-    if ($a->content == $b->content) {
-        return 0;
-    }
     return ($a->content < $b->content) ? 1 : -1;
 }

@@ -23,12 +23,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(__FILE__).'/../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->dirroot.'/comment/lib.php');
-require_once($CFG->dirroot.'/comment/locallib.php');
-require_once($CFG->dirroot.'/report/comments/locallib.php');
-require_once($CFG->libdir.'/tablelib.php');
+require_once(dirname(__FILE__) . '/../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->dirroot . '/comment/lib.php');
+require_once($CFG->dirroot . '/comment/locallib.php');
+require_once($CFG->dirroot . '/report/comments/locallib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 $courseid   = required_param('course', PARAM_INT);
 $userid     = optional_param('id', 0, PARAM_INT);
