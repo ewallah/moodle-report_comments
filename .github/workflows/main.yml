@@ -60,6 +60,9 @@ jobs:
       - name: Composer install
         run: cd ci; composer install
 
+      - name: Composer update
+        run: cd ci; composer update
+
       - name: Set path 1
         run: echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
 

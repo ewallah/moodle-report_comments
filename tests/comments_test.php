@@ -245,7 +245,6 @@ class report_comments_tests_testcase extends advanced_testcase {
     public function test_other() {
         global $CFG, $PAGE;
         $this->setAdminUser();
-        $PAGE->set_url('/course/view.php', ['id' => $this->course->id]);
         require_once($CFG->dirroot . '/report/comments/db/access.php');
         chdir($CFG->dirroot . '/report/comments');
         $_POST['course'] = $this->course->id;
