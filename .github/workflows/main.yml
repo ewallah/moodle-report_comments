@@ -33,19 +33,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - php: '7.4'
-            moodle-branch: 'master'
-          - php: '7.4'
-            moodle-branch: 'MOODLE_311_STABLE'
-          - php: '7.4'
-            moodle-branch: 'MOODLE_310_STABLE'
-          - php: '7.4'
-            moodle-branch: 'MOODLE_39_STABLE'
-          - php: '7.4'
-            moodle-branch: 'MOODLE_38_STABLE'            
+        moodle-branch: ['master', 'MOODLE_311_STABLE', 'MOODLE_310_STABLE', 'MOODLE_39_STABLE', 'MOODLE_38_STABLE']
 
     steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+           php-version: '7.4'
+
       - name: Checkout plugin
         uses: actions/checkout@v2
         with:
@@ -59,9 +54,6 @@ jobs:
 
       - name: Composer install
         run: cd ci; composer install
-
-      - name: Composer update
-        run: cd ci; composer update
 
       - name: Set path 1
         run: echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
