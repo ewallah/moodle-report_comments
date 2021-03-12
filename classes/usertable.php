@@ -141,13 +141,9 @@ class usertable extends \table_sql {
     public function col_userid(\stdClass $row) {
         global $DB, $OUTPUT;
         $s = '';
-        if ($row->contexturl) {
-            $user = $DB->get_record('user', ['id' => $row->userid], \user_picture::fields());
-            if ($this->download) {
-                $s = fullname($user);
-            } else {
-                $s = $OUTPUT->user_picture($user);
-            }
+        if ($row->contexturl && $user = $DB->get_record('user', ['id' => $row->userid])) {
+            // TODO: \core\user_fields::for_userpic()->get_required_fields());.
+            $s = ($this->download) ? fullname($user) : $OUTPUT->user_picture($user);
         }
         return $s;
     }
