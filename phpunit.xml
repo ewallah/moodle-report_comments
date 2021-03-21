@@ -41,5 +41,4 @@
             <file>version.php</file>
         </exclude>
     </coverage>
-
 </phpunit>

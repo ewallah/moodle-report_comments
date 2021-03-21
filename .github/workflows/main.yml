@@ -83,7 +83,7 @@ jobs:
         run: moodle-plugin-ci --ansi grunt
 
       - name: phpunit 
-        run: vendor/bin/phpunit --coverage-clover ./coverage/lcov.info --colors --coverage-text --testsuite report_comments_testsuite
+        run: vendor/bin/phpunit --configuration report/comments/phpunit.xml --coverage-clover coverage/lcov.info --colors --testsuite report_comments_testsuite
         working-directory: moodle
 
       - name: firefox
