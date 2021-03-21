@@ -83,7 +83,7 @@ jobs:
         run: moodle-plugin-ci --ansi grunt
 
       - name: phpunit 
-        run: vendor/bin/phpunit --configuration report/comments/phpunit.xml --coverage-clover coverage/lcov.info --colors --testsuite report_comments_testsuite
+        run: vendor/bin/phpunit --coverage-clover lcov.info --colors --testsuite report_comments_testsuite
         working-directory: moodle
 
       - name: firefox
@@ -104,6 +104,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token:  ${{ secrets.github_token }}
+          path-to-lcov: moodle/lcov.info 
           flag-name: run-${{ matrix.moodle-branch }}-php${{ matrix.php }}-${{ matrix.database }}
           parallel: true
 
@@ -114,5 +115,6 @@ jobs:
     - name: coveralls
       uses: coverallsapp/github-action@master
       with:
+        path-to-lcov: moodle/lcov.info
         github-token:  ${{ secrets.github_token }}
         parallel-finished: true
