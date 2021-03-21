@@ -83,7 +83,8 @@ jobs:
         run: moodle-plugin-ci --ansi grunt
 
       - name: phpunit 
-        run: moodle-plugin-ci phpunit --ansi --coverage-text --coverage-clover
+        run: vendor/bin/phpunit --coverage-clover ./coverage/lcov.info --colors --coverage-text --testsuite report_comments_testsuite
+        working-directory: moodle
 
       - name: firefox
         run: moodle-plugin-ci behat --ansi
@@ -100,8 +101,18 @@ jobs:
         working-directory: moodle
 
       - name: coveralls
-        env:
-          COVERALLS_RUN_LOCALLY: true
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: moodle-plugin-ci coveralls-upload
-        if: matrix.moodle-branch == 'master'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token:  ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.moodle-branch }}-php${{ matrix.php }}-${{ matrix.database }}
+          parallel: true
+
+  finish:
+    needs: ci
+    runs-on: ubuntu-18.04
+    steps:
+    - name: coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token:  ${{ secrets.github_token }}
+        parallel-finished: true

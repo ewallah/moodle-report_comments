@@ -33,14 +33,13 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">classes</directory>
-            <exclude>
-                <file>version.php</file>
-            </exclude>
-        </whitelist>
-
-    </filter>
+        </include>
+        <exclude>
+            <file>version.php</file>
+        </exclude>
+    </coverage>
 
 </phpunit>
