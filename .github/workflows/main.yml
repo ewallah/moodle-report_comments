@@ -83,14 +83,13 @@ jobs:
         run: moodle-plugin-ci --ansi grunt
 
       - name: phpunit 
-        run: vendor/bin/phpunit --coverage-clover lcov.info --colors --testsuite report_comments_testsuite
-        working-directory: moodle
+        run: moodle-plugin-ci --ansi phpunit --coverage-text
 
       - name: firefox
-        run: moodle-plugin-ci behat --ansi
+        run: moodle-plugin-ci --ansi behat
       
       - name: chrome
-        run: moodle-plugin-ci behat --ansi --profile chrome
+        run: moodle-plugin-ci --ansi behat --profile chrome
 
       - name: admin bookmarks
         run: php admin/tool/behat/cli/run.php --tags=@block_admin_bookmarks
@@ -99,22 +98,3 @@ jobs:
       - name: privacy
         run: vendor/bin/phpunit --colors --no-coverage --testsuite tool_dataprivacy_testsuite,tool_policy_testsuite,core_privacy_testsuite
         working-directory: moodle
-
-      - name: coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token:  ${{ secrets.github_token }}
-          path-to-lcov: moodle/lcov.info 
-          flag-name: run-${{ matrix.moodle-branch }}-php${{ matrix.php }}-${{ matrix.database }}
-          parallel: true
-
-  finish:
-    needs: ci
-    runs-on: ubuntu-18.04
-    steps:
-    - name: coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        path-to-lcov: moodle/lcov.info
-        github-token:  ${{ secrets.github_token }}
-        parallel-finished: true
