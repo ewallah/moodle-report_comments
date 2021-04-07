@@ -49,6 +49,14 @@ require_login();
 require_capability('report/comments:view', $context);
 
 $strcomments = get_string('comments');
+// Trigger a report viewed event.
+$event = \report_comments\event\report_viewed::create(['context' => $context]);
+$event->trigger();
+
+if ($action and !confirm_sesskey()) {
+    // No action if sesskey not confirmed.
+    $action = '';
+}
 
 if ($courseid > 1) {
     $PAGE->set_course($course);
@@ -59,11 +67,6 @@ $PAGE->set_context($context);
 $PAGE->set_pagetype('report-comments');
 $PAGE->set_title($strcomments);
 $PAGE->set_heading($strcomments);
-
-if ($action and !confirm_sesskey()) {
-    // No action if sesskey not confirmed.
-    $action = '';
-}
 
 if ($action === 'delete') {
     // Delete a single comment.
@@ -135,7 +138,3 @@ if (count($comments) == 0) {
 
 
 echo $OUTPUT->footer($course);
-
-// Trigger a report viewed event.
-$event = \report_comments\event\report_viewed::create(['context' => $context]);
-$event->trigger();
