@@ -36,13 +36,14 @@ function report_comments_extend_navigation_course($navigation, $course, $context
     global $CFG;
     if (has_capability('report/comments:view', $context)) {
         if ($CFG->usecomments) {
+            $str = get_string('comments');
             $url = new \moodle_url('/report/comments/index.php', ['course' => $course->id]);
-            $navigation->add(get_string('comments'), $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $navigation->add($str, $url, navigation_node::TYPE_SETTING, null, null, new \pix_icon('i/report', $str));
         }
         if ($CFG->enablenotes) {
             $url = new \moodle_url('/notes/index.php', ['course' => $course->id]);
             $str = get_string('notes', 'notes');
-            $navigation->add($str, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $navigation->add($str, $url, navigation_node::TYPE_SETTING, null, null, new \pix_icon('i/report', $str));
         }
     }
 }
@@ -81,7 +82,5 @@ function report_comments_myprofile_navigation(\core_user\output\myprofile\tree $
  * @return array
  */
 function report_comments_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    return [
-        '*'                  => new \lang_string('page-x', 'pagetype'),
-        'report-*'           => new \lang_string('page-report-x', 'pagetype')];
+    return ['*' => new \lang_string('page-x', 'pagetype'), 'report-*' => new \lang_string('page-report-x', 'pagetype')];
 }
