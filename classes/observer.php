@@ -52,7 +52,7 @@ class observer {
                         $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
                         $supportuser = \core_user::get_support_user();
                         if ($teachers = get_role_users($role->id, $context)) {
-                            $sendtext = $CFG->wwwroot . ': '. $USER->firstname . ' ' . $USER->lastname . ' made a comment.';
+                            $sendtext = $CFG->wwwroot . ': '. fullname($USER) . ' made a comment.';
                             if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {
                                 $message = new \core\message\message();
                                 $message->component = 'report_comments';
