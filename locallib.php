@@ -36,9 +36,11 @@ defined('MOODLE_INTERNAL') || die;
 function report_comments_getusercomments($userid, $sort = 'date', $sortdir = 3):array {
     global $CFG, $DB;
     $comments = [];
-    if ($user = $DB->get_record('user', ['id' => $userid], 'firstname, lastname')) {
+    $ver = (int)$CFG->branch;
+    $fields = ($ver > 310) ? \core_user\fields::for_name()->get_sql('', false, '', '', false)->selects : \user_picture::fields('');
+    if ($user = $DB->get_record('user', ['id' => $userid], $fields)) {
         $url = new moodle_url('/user/view.php', ['id' => $userid]);
-        $fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
+        $fullname = html_writer::link($url, fullname($user));
         $format = ['overflowdiv' => true];
         $strftimeformat = get_string('strftimerecentfull', 'langconfig');
 
@@ -88,11 +90,13 @@ function report_comments_getcoursecomments($courseid, $sort = 'date', $sortdir =
     $format = ['overflowdiv' => true];
     $strftimeformat = get_string('strftimerecentfull', 'langconfig');
     $context = context_course::instance($courseid);
+    $ver = (int)$CFG->branch;
+    $fields = ($ver > 310) ? \core_user\fields::for_name()->get_sql('', false, '', '', false)->selects : \user_picture::fields('');
     $comments = $DB->get_records('comments', ['contextid' => $context->id]);
     foreach ($comments as $comment) {
-        $user = $DB->get_record('user', ['id' => $comment->userid], 'firstname, lastname');
+        $user = $DB->get_record('user', ['id' => $comment->userid], $fields);
         $url = new moodle_url('/report/comments/index.php', ['id' => $comment->userid, 'course' => $courseid]);
-        $comment->fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
+        $comment->fullname = html_writer::link($url, fullname($user));
         $comment->time = userdate($comment->timecreated, $strftimeformat);
         $url = course_get_url($courseid);
         $comment->content = html_writer::link($url, format_text($comment->content, $comment->format, $format));
@@ -103,9 +107,9 @@ function report_comments_getcoursecomments($courseid, $sort = 'date', $sortdir =
         if ($context = $DB->get_record('context', ['instanceid' => $mod->id, 'contextlevel' => CONTEXT_MODULE])) {
             if ($modcomments = $DB->get_records('comments', ['contextid' => $context->id])) {
                 foreach ($modcomments as $comment) {
-                    $user = $DB->get_record('user', ['id' => $comment->userid], 'firstname, lastname');
+                    $user = $DB->get_record('user', ['id' => $comment->userid], $fields);
                     $url = new moodle_url('/report/comments/index.php', ['course' => $courseid, 'id' => $comment->userid]);
-                    $comment->fullname = html_writer::link($url, $user->firstname . ' ' . $user->lastname);
+                    $comment->fullname = html_writer::link($url, fullname($user));
                     $comment->time = userdate($comment->timecreated, $strftimeformat);
                     $base = core_component::get_component_directory('mod_' . $mod->modname);
                     if (file_exists("$base/view.php")) {
