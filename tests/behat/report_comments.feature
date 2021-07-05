@@ -55,7 +55,7 @@ Feature: Comments report
     And I am on "Course 2" course homepage
     And I navigate to "Reports > Comments" in current page administration
     And I follow "comment 02"
-    Then I should see "Course 2"
+    Then I should see "C2"
     And I am on "Course 2" course homepage
     And I navigate to "Reports > Comments" in current page administration
     And I follow "T1 Teacher1"

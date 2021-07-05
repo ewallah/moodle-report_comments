@@ -65,7 +65,7 @@ function report_comments_myprofile_navigation(\core_user\output\myprofile\tree $
     }
     $context = context_system::instance();
     $return = false;
-    if (has_capability('report/comments:view', $context) and $CFG->usecomments) {
+    if ($CFG->usecomments && has_capability('report/comments:view', $context)) {
         $url = new \moodle_url('/report/comments/index.php', ['course' => 1, 'id' => $user->id]);
         $node = new \core_user\output\myprofile\node('reports', 'comments', get_string('comments'), null, $url);
         $tree->add_node($node);

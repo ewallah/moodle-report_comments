@@ -109,10 +109,9 @@ if ($userid == 0) {
     } else {
          $table->out(5, true);
     }
-    $ver = (int)$CFG->branch;
-    $fields = ($ver > 310) ? \core_user\fields::for_name()->get_sql('', false, '', '', false)->selects : \user_picture::fields('');
-    $user = $DB->get_record('user', ['id' => $userid], $fields);
-    echo html_writer::tag('h3', fullname($user));
+    if ($user = \core_user::get_user($userid)) {
+        echo html_writer::tag('h3', fullname($user));
+    }
     $comments = report_comments_getusercomments($userid);
     $tabl->define_columns(['date', 'course', 'content', 'action']);
     $tabl->define_headers([get_string('date'), get_string('course'), get_string('content'), get_string('action')]);

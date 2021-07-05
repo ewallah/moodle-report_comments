@@ -139,9 +139,9 @@ class usertable extends \table_sql {
      * @return string
      */
     public function col_userid(\stdClass $row) {
-        global $DB, $OUTPUT;
+        global $OUTPUT;
         $s = '';
-        if ($row->contexturl && $user = $DB->get_record('user', ['id' => $row->userid])) {
+        if ($row->contexturl && $user = \core_user::get_user($row->userid)) {
             $s = ($this->download) ? fullname($user) : $OUTPUT->user_picture($user);
         }
         return $s;
