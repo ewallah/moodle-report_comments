@@ -90,7 +90,7 @@ jobs:
         run: moodle-plugin-ci --ansi grunt
 
       - name: phpunit 
-        run: moodle-plugin-ci --ansi phpunit --coverage-text || true
+        run: moodle-plugin-ci --ansi phpunit --coverage-text --coverage-clover || true
 
       - name: firefox
         run: moodle-plugin-ci --ansi behat
@@ -105,3 +105,27 @@ jobs:
       - name: privacy
         run: vendor/bin/phpunit --colors --no-coverage --testsuite tool_dataprivacy_testsuite,tool_policy_testsuite,core_privacy_testsuite
         working-directory: moodle
+
+      - name: clover2lcov
+        uses: andstor/clover2lcov-action@v1
+        with:
+          src: ./coverage.xml
+          dst: ./coverage/lcov.info
+
+      - name: coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.moodle-branch matrix.php matrix.database }}
+          parallel: true
+
+  finish:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+    - name: coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        parallel-finished: true
