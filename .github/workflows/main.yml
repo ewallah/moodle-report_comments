@@ -107,7 +107,7 @@ jobs:
         working-directory: moodle
 
       - name: coveralls
-        if: ${{ matrix.moodle-branch == 'master' && matrix.php == 'php7.4' && matrix.database == 'pgsql' }}
+        if: ${{ matrix.moodle-branch == 'master' && matrix.php == '7.4' && matrix.database == 'pgsql' }}
         env:
           COVERALLS_RUN_LOCALLY: true
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
