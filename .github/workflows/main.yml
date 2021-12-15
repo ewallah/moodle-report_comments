@@ -27,12 +27,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: ['MOODLE_311_STABLE', 'MOODLE_310_STABLE']
+        moodle-branch: ['MOODLE_311_STABLE']
         php: ['7.4']
         database: ['pgsql', 'mariadb']
         include:
         - php: 8.0
-          moodle-branch: master
+          moodle-branch: MOODLE_311_STABLE
           database: pgsql
 
     name: ${{ matrix.moodle-branch }}  php ${{ matrix.php }}  ${{ matrix.database }}
