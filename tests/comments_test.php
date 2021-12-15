@@ -22,11 +22,13 @@
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-
+namespace report_comments;
 
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/comment/lib.php');
+
+use stdClass;
 
 /**
  * Class report_comments_events_testcase
@@ -38,7 +40,7 @@ require_once($CFG->dirroot . '/comment/lib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  * @coversDefaultClass \report_comments
  */
-class report_comments_tests_testcase extends advanced_testcase {
+class comments_test extends \advanced_testcase {
 
     /**
      * @var stdClass The course.
@@ -87,7 +89,7 @@ class report_comments_tests_testcase extends advanced_testcase {
      * @coversDefaultClass \report_comments\event\report_viewed
      */
     public function test_report_viewed() {
-        $context = context_course::instance($this->course->id);
+        $context = \context_course::instance($this->course->id);
         require_capability('report/comments:view', $context);
         $event = \report_comments\event\report_viewed::create(['context' => $context]);
         $this->assertEquals('Comments report viewed', $event->get_name());
@@ -98,7 +100,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         $event = reset($events);
         $this->assertInstanceOf('\report_comments\event\report_viewed', $event);
         $this->assertEquals($context, $event->get_context());
-        $url = new moodle_url('/report/comments/index.php', ['course' => $this->course->id]);
+        $url = new \moodle_url('/report/comments/index.php', ['course' => $this->course->id]);
         $this->assertEquals($url, $event->get_url());
         $this->assertEventContextNotUsed($event);
     }
@@ -108,7 +110,7 @@ class report_comments_tests_testcase extends advanced_testcase {
      * @coversDefaultClass \report_comments\observer
      */
     public function test_observer() {
-        $context = context_course::instance($this->course->id);
+        $context = \context_course::instance($this->course->id);
         $sink = $this->redirectEvents();
         $messagesink = $this->redirectMessages();
         $this->comment->add('First comment');
@@ -129,7 +131,7 @@ class report_comments_tests_testcase extends advanced_testcase {
      * @coversDefaultClass \report_comments\privacy\provider
      */
     public function test_privacy() {
-        $privacy = new report_comments\privacy\provider();
+        $privacy = new \report_comments\privacy\provider();
         $this->assertEquals($privacy->get_reason(), 'privacy:metadata');
     }
 
@@ -138,10 +140,10 @@ class report_comments_tests_testcase extends advanced_testcase {
      * @coversDefaultClass \report_comments\usertable
      */
     public function test_usertable() {
-        $coursecontext = context_course::instance($this->course->id);
+        $coursecontext = \context_course::instance($this->course->id);
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
-        assign_capability('report/comments:view', CAP_ALLOW, 5, context_system::instance()->id, true);
+        assign_capability('report/comments:view', CAP_ALLOW, 5, \context_system::instance()->id, true);
         reload_all_capabilities();
         $this->comment->add('First comment for user 2');
         $this->comment->add('Second comment for user 2');
@@ -157,7 +159,7 @@ class report_comments_tests_testcase extends advanced_testcase {
         $row->format = 'html';
         $this->assertStringContainsString('text_to_html', $table->col_content($row));
         $row->contexturl = $coursecontext->get_url();
-        $row->contextid = context_user::instance($user->id);
+        $row->contextid = \context_user::instance($user->id);
         $row->userid = $user->id;
         $this->assertStringContainsString('class="userpicture', $table->col_userid($row));
         $this->assertStringContainsString('value="Delete"', $table->col_action($row));
@@ -180,14 +182,14 @@ class report_comments_tests_testcase extends advanced_testcase {
      */
     public function test_invalid_usertable() {
         $category = $this->getDataGenerator()->create_category();
-        $categorycontext = context_coursecat::instance($category->id);
+        $categorycontext = \context_coursecat::instance($category->id);
         $this->setAdminUser();
         $table = new \report_comments\usertable(2);
         $row = new stdClass;
         $row->contextid = $categorycontext->id;
         try {
             $this->assertEquals(1, $table->col_id($row));
-        } catch (moodle_exception $e) {
+        } catch (\moodle_exception $e) {
             $this->assertStringContainsString('error/invalid context', $e->getMessage());
         }
     }
@@ -225,7 +227,7 @@ class report_comments_tests_testcase extends advanced_testcase {
     public function test_navigation() {
         global $CFG, $PAGE, $USER;
         require_once($CFG->dirroot . '/report/comments/lib.php');
-        $context = context_course::instance($this->course->id);
+        $context = \context_course::instance($this->course->id);
         $this->setAdminUser();
         $PAGE->set_url('/course/view.php', ['id' => $this->course->id]);
         $tree = new \global_navigation($PAGE);
@@ -270,13 +272,13 @@ class report_comments_tests_testcase extends advanced_testcase {
      */
     protected function get_comment_object($course) {
         // Comment on course page.
-        $args = new stdClass;
-        $args->context = context_course::instance($course->id);
+        $args = new \stdClass;
+        $args->context = \context_course::instance($course->id);
         $args->course = $course;
         $args->area = 'page_comments';
         $args->itemid = 0;
         $args->component = 'block_comments';
-        $comment = new comment($args);
+        $comment = new \comment($args);
         $comment->set_post_permission(true);
         return $comment;
     }
@@ -294,13 +296,13 @@ class report_comments_tests_testcase extends advanced_testcase {
         $cm = get_coursemodule_from_instance('glossary', $glossary->id, $this->course->id);
         $cmt = new stdClass();
         $cmt->component = 'mod_glossary';
-        $cmt->context = context_module::instance($glossary->cmid);
+        $cmt->context = \context_module::instance($glossary->cmid);
         $cmt->course = $this->course;
         $cmt->cm = $cm;
         $cmt->area = 'glossary_entry';
         $cmt->itemid = $entry->id;
         $cmt->showcount = true;
-        $comment = new comment($cmt);
+        $comment = new \comment($cmt);
         $comment->set_post_permission(true);
         return $comment;
     }

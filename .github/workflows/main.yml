@@ -27,8 +27,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: ['master', 'MOODLE_311_STABLE', 'MOODLE_310_STABLE', 'MOODLE_39_STABLE']
-        php: ['7.4', '7.3']
+        moodle-branch: ['MOODLE_311_STABLE', 'MOODLE_310_STABLE']
+        php: ['7.4']
         database: ['pgsql', 'mariadb']
         include:
         - php: 8.0
@@ -66,36 +66,52 @@ jobs:
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: phplint
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi phplint
 
       - name: phpcpd
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi phpcpd
 
       - name: phpmd
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi phpmd
 
+      - name: phpdoc
+        if: ${{ always() }}
+        run: moodle-plugin-ci --ansi phpdoc
+
       - name: codechecker
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi codechecker
 
       - name: validate
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi validate
 
       - name: savepoints
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi savepoints
 
-      - name: mustache
-        run: moodle-plugin-ci --ansi mustache
-
       - name: grunt
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi grunt
 
-      - name: phpunit 
-        run: moodle-plugin-ci --ansi phpunit --coverage-text --coverage-clover || true
+      - name: mustache
+        if: ${{ always() }}
+        run: moodle-plugin-ci --ansi mustache
+
+      - name: phpunit
+        continue-on-error: true
+        if: ${{ always() }}
+        run: moodle-plugin-ci --ansi phpunit --coverage-text
 
       - name: firefox
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi behat
       
       - name: chrome
+        if: ${{ always() }}
         run: moodle-plugin-ci --ansi behat --profile chrome
 
       - name: admin bookmarks
