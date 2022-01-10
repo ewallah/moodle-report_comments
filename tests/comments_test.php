@@ -161,7 +161,7 @@ class comments_test extends \advanced_testcase {
         $row->contexturl = $coursecontext->get_url();
         $row->contextid = \context_user::instance($user->id);
         $row->userid = $user->id;
-        $this->assertStringContainsString('class="userpicture', $table->col_userid($row));
+        $this->assertStringContainsString('profile', $table->col_userid($row));
         $this->assertStringContainsString('value="Delete"', $table->col_action($row));
         $this->setAdminUser();
         $table = new \report_comments\usertable($user->id, true);
