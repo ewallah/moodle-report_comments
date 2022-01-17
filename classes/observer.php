@@ -25,8 +25,9 @@
 
 namespace report_comments;
 
-defined('MOODLE_INTERNAL') || die();
-
+use context_course;
+use core_user;
+use moodle_url;
 /**
  * Class observer.
  *
@@ -48,9 +49,9 @@ class observer {
             if (!empty($comment)) {
                 if (!empty($comment->courseid)) {
                     if ($DB->record_exists('course', ['id' => $comment->courseid])) {
-                        $context = \context_course::instance($comment->courseid);
+                        $context = context_course::instance($comment->courseid);
                         $role = $DB->get_record('role', ['shortname' => 'editingteacher']);
-                        $supportuser = \core_user::get_support_user();
+                        $supportuser = core_user::get_support_user();
                         if ($teachers = get_role_users($role->id, $context)) {
                             $sendtext = $CFG->wwwroot . ': '. fullname($USER) . ' made a comment.';
                             if ($content = $DB->get_field('comments', 'content', ['id' => $comment->objectid])) {
@@ -65,7 +66,7 @@ class observer {
                                 $message->fullmessagehtml = stripcslashes($content);
                                 $message->smallmessage = $sendtext;
                                 $message->notification = '1';
-                                $message->contexturl = new \moodle_url('/course/view.php', ['id' => $comment->courseid]);
+                                $message->contexturl = new moodle_url('/course/view.php', ['id' => $comment->courseid]);
                                 $message->contexturlname = $sendtext;
                                 $message->set_additional_content('email', ['*' => ['header' => $CFG->wwwroot, 'footer' => ' ']]);
                                 foreach ($teachers as $admin) {

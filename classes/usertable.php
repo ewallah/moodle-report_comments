@@ -27,6 +27,14 @@ namespace report_comments;
 defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/tablelib.php');
 
+use context;
+use core_user;
+use core_component;
+use html_writer;
+use moodle_url;
+use moodle_exception;
+use stdClass;
+
 /**
  * Extends table_sql to provide a table of user comments
  *
@@ -54,7 +62,7 @@ class usertable extends \table_sql {
         parent::__construct('comments');
         $this->download = $download;
         $arr = ['course' => 1, 'id' => $userid];
-        $this->define_baseurl(new \moodle_url('/report/comments/index.php', $arr));
+        $this->define_baseurl(new moodle_url('/report/comments/index.php', $arr));
         $this->timeformat = get_string('strftimerecentfull', 'langconfig');
         $this->counter = 1;
         $this->set_sql('id, timecreated, userid, content, format, contextid, component, commentarea, itemid',
@@ -79,26 +87,26 @@ class usertable extends \table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_id(\stdClass $row) {
+    public function col_id(stdClass $row) {
         global $CFG;
-        $context = \context::instance_by_id($row->contextid, IGNORE_MISSING);
+        $context = context::instance_by_id($row->contextid, IGNORE_MISSING);
         if ($context) {
             $row->contexturl = false;
             if (has_capability('report/comments:view', $context)) {
                 switch ($context->contextlevel) {
                     case CONTEXT_MODULE:
                         $cm = get_coursemodule_from_id('', $context->instanceid);
-                        $base = \core_component::get_component_directory('mod_' . $cm->modname);
+                        $base = core_component::get_component_directory('mod_' . $cm->modname);
                         if (file_exists("$base/view.php")) {
                             $base = substr($base, strlen($CFG->dirroot));
-                            $row->contexturl = new \moodle_url("$base/view.php", ['id' => $cm->id]);
+                            $row->contexturl = new moodle_url("$base/view.php", ['id' => $cm->id]);
                         }
                         break;
                     case CONTEXT_COURSE:
                         $row->contexturl = course_get_url(get_course($context->instanceid));
                         break;
                     default:
-                        throw new \comment_exception('invalid context');
+                        throw new moodle_exception('invalid context');
                 }
             }
         }
@@ -115,9 +123,9 @@ class usertable extends \table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_timecreated(\stdClass $row) {
+    public function col_timecreated(stdClass $row) {
         if ($row->contexturl) {
-            return \html_writer::link($row->contexturl, userdate($row->timecreated, $this->timeformat));
+            return html_writer::link($row->contexturl, userdate($row->timecreated, $this->timeformat));
         }
         return userdate($row->timecreated, $this->timeformat);
     }
@@ -128,7 +136,7 @@ class usertable extends \table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_content(\stdClass $row) {
+    public function col_content(stdClass $row) {
         return format_text($row->content, $row->format);
     }
 
@@ -138,10 +146,10 @@ class usertable extends \table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_userid(\stdClass $row) {
+    public function col_userid(stdClass $row) {
         global $OUTPUT;
         $s = '';
-        if ($row->contexturl && $user = \core_user::get_user($row->userid)) {
+        if ($row->contexturl && $user = core_user::get_user($row->userid)) {
             $s = ($this->download) ? fullname($user) : $OUTPUT->user_picture($user);
         }
         return $s;
@@ -153,14 +161,14 @@ class usertable extends \table_sql {
      * @param stdClass $row
      * @return string
      */
-    public function col_action(\stdClass $row) {
+    public function col_action(stdClass $row) {
         $s = '';
         if (!$this->is_downloading() and $row->contexturl) {
             $arr = $this->baseurl->params();
             $arr['action'] = 'delete';
             $arr['sesskey'] = sesskey();
-            $url = new \moodle_url($this->baseurl->out_omit_querystring(), $arr);
-            $s = \html_writer::empty_tag('input', ['type' => 'submit', 'formaction' => $url, 'value' => get_string('delete')]);
+            $url = new moodle_url($this->baseurl->out_omit_querystring(), $arr);
+            $s = html_writer::empty_tag('input', ['type' => 'submit', 'formaction' => $url, 'value' => get_string('delete')]);
         }
         return $s;
     }

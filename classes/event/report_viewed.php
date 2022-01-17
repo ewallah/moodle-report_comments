@@ -22,10 +22,9 @@
  * @author     Renaat Debleu <info@eWallah.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace report_comments\event;
 
-defined('MOODLE_INTERNAL') || die();
+use moodle_url;
 
 /**
  * The report viewed event.
@@ -71,6 +70,6 @@ class report_viewed extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/report/comments/index.php', ['course' => $this->courseid]);
+        return new moodle_url('/report/comments/index.php', ['course' => $this->courseid]);
     }
 }
