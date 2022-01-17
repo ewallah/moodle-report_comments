@@ -95,11 +95,11 @@ jobs:
 
       - name: firefox
         if: ${{ always() }}
-        run: moodle-plugin-ci --ansi behat --suite="ewa2"
+        run: moodle-plugin-ci --ansi behat
       
       - name: chrome
         if: ${{ always() }}
-        run: moodle-plugin-ci --ansi behat --suite="ewa2" --profile chrome
+        run: moodle-plugin-ci --ansi behat --profile chrome
 
       - name: admin bookmarks
         if: ${{ always() }}
