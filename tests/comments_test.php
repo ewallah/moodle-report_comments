@@ -91,6 +91,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Test the report viewed event.
+     * @covers report_comments\event\report_viewed
      */
     public function test_report_viewed() {
         $context = context_course::instance($this->course->id);
@@ -111,6 +112,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Test observer.
+     * @covers report_comments\observer
      */
     public function test_observer() {
         $context = context_course::instance($this->course->id);
@@ -131,6 +133,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Test privacy.
+     * @covers report_comments\privacy\provider
      */
     public function test_privacy() {
         $privacy = new privacy\provider();
@@ -139,6 +142,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Test the usertable.
+     * @covers report_comments\usertable
      */
     public function test_usertable() {
         $coursecontext = context_course::instance($this->course->id);
@@ -179,6 +183,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Test the invalid usertable.
+     * @covers report_comments\usertable
      */
     public function test_invalid_usertable() {
         $category = $this->getDataGenerator()->create_category();
@@ -196,6 +201,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Tests the locallib.
+     * @coversNothing
      */
     public function test_locallib() {
         global $CFG;
@@ -223,6 +229,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Tests the report navigation as an admin.
+     * @coversNothing
      */
     public function test_navigation() {
         global $CFG, $PAGE, $USER;
@@ -243,6 +250,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Tests orther files.
+     * @coversNothing
      */
     public function test_other() {
         global $CFG, $PAGE;
@@ -256,6 +264,7 @@ class comments_test extends advanced_testcase {
 
     /**
      * Tests settings.
+     * @coversNothing
      */
     public function test_settings() {
         global $ADMIN, $CFG;
