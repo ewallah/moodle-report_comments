@@ -136,6 +136,7 @@ class comments_test extends advanced_testcase {
      * @covers \report_comments\privacy\provider
      */
     public function test_privacy() {
+
         $privacy = new privacy\provider();
         $this->assertEquals($privacy->get_reason(), 'privacy:metadata');
     }

@@ -23,6 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\report_helper;
+
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/comment/lib.php');
@@ -93,6 +95,7 @@ if ($action === 'delete') {
 }
 
 echo $OUTPUT->header();
+report_helper::print_report_selector(get_string('pluginname', 'report_comments'));
 
 $tabl = new flexible_table('admin-comments-compatible');
 
@@ -104,11 +107,7 @@ if ($userid == 0) {
 
 } else {
     $table = new \report_comments\usertable($userid, $download);
-    if ($table->is_downloading($download)) {
-         $table->out(999, true);
-    } else {
-         $table->out(5, true);
-    }
+    $table->out($table->is_downloading($download) ? 999 : 25, true);
     if ($user = \core_user::get_user($userid)) {
         echo html_writer::tag('h3', fullname($user));
     }
@@ -118,9 +117,7 @@ if ($userid == 0) {
 }
 
 
-if (count($comments) == 0) {
-    echo $OUTPUT->notification(get_string('nocomments', 'moodle'));
-} else {
+if (count($comments) > 0) {
     $tabl->sortable(true, 'date', SORT_DESC);
     $tabl->no_sorting('action');
 
@@ -136,6 +133,4 @@ if (count($comments) == 0) {
     }
     $tabl->print_html();
 }
-
-
 echo $OUTPUT->footer($course);

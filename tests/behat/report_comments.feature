@@ -36,7 +36,7 @@ Feature: Comments report
       | HTML format | Test wiki content |
       | Tags | Test tag 1, Test tag 2, |
     And I press "Save"
-    And I follow "Comments"
+    And I select "Comments" from the "jump" singleselect
     And I follow "Add comment"
     And I set the following fields to these values:
       | Comment | comment 04 |
@@ -55,7 +55,7 @@ Feature: Comments report
     And I am on "Course 2" course homepage
     And I navigate to "Reports > Comments" in current page administration
     And I follow "comment 02"
-    Then I should see "C2"
+    Then I should see "Course 2"
     And I am on "Course 2" course homepage
     And I navigate to "Reports > Comments" in current page administration
     And I follow "T1 Teacher1"
