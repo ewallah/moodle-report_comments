@@ -9,15 +9,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: ['MOODLE_311_STABLE']
-        php: ['7.4']
+        moodle-branch: ['MOODLE_400_STABLE', 'MOODLE_311_STABLE']
+        php: ['8.0']
         database: ['mysqli']
         plugin-branch: ['main']
-        include:
-        - php: 8.0
-          moodle-branch: master
-          plugin-branch: dev
-          database: mysqli
 
     name: ${{ matrix.moodle-branch }}  php ${{ matrix.php }}  ${{ matrix.database }}
 
