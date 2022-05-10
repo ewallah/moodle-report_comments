@@ -30,13 +30,7 @@ Feature: Comments report
     And I add the "Comments" block
     And I add "comment 02" comment to comments block
     And I add "comment 03" comment to comments block
-    And I am on "Course 2" course homepage
-    And I follow "Test wiki"
-    And I press "Create page"
-    And I set the following fields to these values:
-      | HTML format | Test wiki content |
-      | Tags | Test tag 1, Test tag 2, |
-    And I press "Save"
+    And I am on the "Test wiki" "wiki activity" page
     And I select "Comments" from the "jump" singleselect
     And I follow "Add comment"
     And I set the following fields to these values:
