@@ -8,7 +8,7 @@ Feature: Comments report
       | fullname | shortname | category |
       | Course 1 | C1 | 0 |
       | Course 2 | C2 | 0 |
-    Given the following "users" exist:
+    And the following "users" exist:
       | username | firstname | lastname |
       | teacher1 | T1 | Teacher1 |
       | teacher2 | T2 | Teacher2 |
@@ -22,7 +22,17 @@ Feature: Comments report
       | teacher1 | C2 | editingteacher |
       | teacher2 | C2 | editingteacher |
       | student1 | C1 | student |
-    And I log in as "teacher1"
+    And I am on the "Test wiki" "wiki activity" page logged in as teacher1
+    And I press "Create page"
+    And I set the following fields to these values:
+      | HTML format | First edition |
+    And I press "Save"
+    And I select "Comments" from the "jump" singleselect
+    And I follow "Add comment"
+    And I set the following fields to these values:
+      | Comment | comment 04 |
+    And I press "Save"
+    And I wait to be redirected
     And I am on "Course 1" course homepage with editing mode on
     And I add the "Comments" block
     And I add "comment 01" comment to comments block
@@ -30,12 +40,6 @@ Feature: Comments report
     And I add the "Comments" block
     And I add "comment 02" comment to comments block
     And I add "comment 03" comment to comments block
-    And I am on the "Test wiki" "wiki activity" page
-    And I select "Comments" from the "jump" singleselect
-    And I follow "Add comment"
-    And I set the following fields to these values:
-      | Comment | comment 04 |
-    And I press "Save changes"
     And I log out
 
   Scenario: See if there are links created on the comment report.
