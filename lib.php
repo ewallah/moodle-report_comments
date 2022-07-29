@@ -58,7 +58,7 @@ function report_comments_extend_navigation_course($navigation, $course, $context
  */
 function report_comments_myprofile_navigation(\core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
     global $CFG;
-    if (isguestuser($user) or !$iscurrentuser) {
+    if (isguestuser($user) || !$iscurrentuser) {
         return false;
     }
     $context = context_system::instance();

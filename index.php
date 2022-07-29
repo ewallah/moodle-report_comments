@@ -55,7 +55,7 @@ $strcomments = get_string('comments');
 $event = \report_comments\event\report_viewed::create(['context' => $context]);
 $event->trigger();
 
-if ($action and !confirm_sesskey()) {
+if ($action && !confirm_sesskey()) {
     // No action if sesskey not confirmed.
     $action = '';
 }

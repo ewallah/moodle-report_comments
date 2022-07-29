@@ -163,7 +163,7 @@ class usertable extends \table_sql {
      */
     public function col_action(stdClass $row) {
         $s = '';
-        if (!$this->is_downloading() and $row->contexturl) {
+        if (!$this->is_downloading() && $row->contexturl) {
             $arr = $this->baseurl->params();
             $arr['action'] = 'delete';
             $arr['sesskey'] = sesskey();
