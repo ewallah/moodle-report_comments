@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        moodle-branch: ['MOODLE_400_STABLE', 'MOODLE_311_STABLE', 'master']
+        moodle-branch: ['MOODLE_401_STABLE', 'master']
         php: ['8.0']
         database: ['mysqli']
         plugin-branch: ['main']
@@ -38,7 +38,6 @@ jobs:
            echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
            sudo apt install rename
            sudo locale-gen en_AU.UTF-8
-           sed -i 's/phpdbg -d memory_limit=-1 -qrr//g' ci/src/Command/PHPUnitCommand.php
            sudo systemctl start mysql.service
 
       - name: install Moodle
