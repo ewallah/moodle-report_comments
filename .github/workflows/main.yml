@@ -85,15 +85,15 @@ jobs:
 
       - name: phpunit
         if: ${{ always() }}
-        run: moodle-plugin-ci --ansi phpunit --coverage-text
+        run: moodle-plugin-ci --ansi phpunit --coverage-text --coverage-clover
 
       - name: firefox
         if: ${{ always() }}
-        run: moodle-plugin-ci --ansi behat || true
+        run: moodle-plugin-ci --ansi behat
       
       - name: chrome
         if: ${{ always() }}
-        run: moodle-plugin-ci --ansi behat --profile chrome || true
+        run: moodle-plugin-ci --ansi behat --profile chrome
 
       - name: privacy
         if: ${{ always() }}
