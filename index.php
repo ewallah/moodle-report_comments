@@ -32,14 +32,14 @@ require_once($CFG->dirroot . '/comment/locallib.php');
 require_once($CFG->dirroot . '/report/comments/locallib.php');
 require_once($CFG->libdir . '/tablelib.php');
 
-$courseid   = required_param('course', PARAM_INT);
-$userid     = optional_param('id', 0, PARAM_INT);
-$commentid  = optional_param('commentid', 0, PARAM_INT);
-$action     = optional_param('action', '', PARAM_ALPHA);
-$confirm    = optional_param('confirm', 0, PARAM_INT);
-$sort       = optional_param('tsort', 'date', PARAM_ALPHA);
-$sortdir    = optional_param('tdir', 3, PARAM_INT);
-$download   = optional_param('download', '', PARAM_ALPHA);
+$courseid = required_param('course', PARAM_INT);
+$userid = optional_param('id', 0, PARAM_INT);
+$commentid = optional_param('commentid', 0, PARAM_INT);
+$action = optional_param('action', '', PARAM_ALPHA);
+$confirm = optional_param('confirm', 0, PARAM_INT);
+$sort = optional_param('tsort', 'date', PARAM_ALPHA);
+$sortdir = optional_param('tdir', 3, PARAM_INT);
+$download = optional_param('download', '', PARAM_ALPHA);
 
 $course = get_course($courseid);
 $context = context_course::instance($courseid);
@@ -77,7 +77,7 @@ if ($action === 'delete') {
             echo $OUTPUT->header();
             $optionsyes = ['course' => $courseid, 'action' => 'delete', 'commentid' => $commentid,
                            'confirm' => 1, 'sesskey' => sesskey()];
-            $optionsno  = ['course' => $courseid, 'sesskey' => sesskey()];
+            $optionsno = ['course' => $courseid, 'sesskey' => sesskey()];
             $buttoncontinue = new single_button(new moodle_url($url, $optionsyes), get_string('delete'));
             $buttoncancel = new single_button(new moodle_url($url, $optionsno), get_string('cancel'));
             echo $OUTPUT->confirm(get_string('confirmdeletecomments', 'admin'), $buttoncontinue, $buttoncancel);

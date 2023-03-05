@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $observers = [['eventname' => 'core\event\comment_created',
-               'callback'  => 'report_comments\observer::commentcreated',
-               'internal'  => true],
+               'callback' => 'report_comments\observer::commentcreated',
+               'internal' => true],
               ['eventname' => 'block_comments\event\comment_created',
-               'callback'  => 'report_comments\observer::commentcreated',
-               'internal'  => true]];
+               'callback' => 'report_comments\observer::commentcreated',
+               'internal' => true]];
